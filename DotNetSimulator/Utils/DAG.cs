@@ -20,7 +20,7 @@ namespace DotNetSimulator.Utils
     ///  
     /// </summary>
     /// <typeparam name="T">The Type of the Node.</typeparam>
-    internal class DAG<T>
+    internal class DAG<T> where T : class
     {
 
         private readonly ISet<T> nodes;
@@ -40,10 +40,10 @@ namespace DotNetSimulator.Utils
             nodes.Add(node);
         }
 
-        public void AddEdge(T fromNode, T toNode)
+        public void AddEdge(T? fromNode, T? toNode)
         {
-            if (fromNode == null) throw new ArgumentNullException("Fron Node must not be null!");
-            if (toNode == null) throw new ArgumentNullException("ToNode must not be null!");
+            if (fromNode == null) throw new ArgumentNullException(nameof(fromNode));
+            if (toNode == null) throw new ArgumentNullException(nameof(toNode));
             if (!nodes.Contains(fromNode)) AddNode(fromNode);
             if (!nodes.Contains(toNode)) AddNode(toNode);
 
