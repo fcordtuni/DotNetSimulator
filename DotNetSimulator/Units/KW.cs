@@ -6,26 +6,17 @@ using System.Threading.Tasks;
 
 namespace DotNetSimulator.Units
 {
-    public enum Current
-    {
-        DC,
-        AC
-    }
     public struct KW
     {
         public double Amount { get; private set; }
-        public Current Current { get; private set; }
-        public KW(double amount, Current current) { this.Amount = amount; this.Current = current; }
+        public KW(double amount) { Amount = amount; }
 
 
-        public KWH forTimeSpan(TimeSpan time)
-        {
-            return new KWH(this, time);
-        }
+        public readonly KWH ForTimeSpan(TimeSpan time) => new(this, time);
 
-        public static KWH operator *(KW kw, TimeSpan time)
-        {
-            return kw.forTimeSpan(time);
-        }
+        public static KWH operator *(KW kw, TimeSpan time) => kw.ForTimeSpan(time);
+
+        public static KW operator *(KW left, double right) => new(left.Amount * right);
+        public static KW operator *(double left, KW right) => right * left;
     }
 }

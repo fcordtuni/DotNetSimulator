@@ -1,2 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+using DotNetSimulator.Simulator;
+
+SimulationLogic logic = new();
+logic.Simulate(DateTime.Now, DateTime.Now.AddDays(1), TimeSpan.FromSeconds(1));

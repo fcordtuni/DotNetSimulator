@@ -16,6 +16,11 @@ namespace DotNetSimulator.Units
         public TimeStep(DateTime start, DateTime end) { Start = start; End = end; Duration = end - start; }
         public TimeStep(DateTime start, TimeSpan duration) { Start = start; End = start + duration; Duration = duration; }
 
-        public TimeStep Next(TimeSpan duration) { return new TimeStep(End, duration); }
+        public readonly TimeStep Next(TimeSpan duration) => new(End, duration);
+
+        public override readonly string ToString()
+        {
+            return Start.ToString() + " - " + End.ToString();
+        }
     }
 }
