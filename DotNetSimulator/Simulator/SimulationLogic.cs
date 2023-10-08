@@ -1,4 +1,4 @@
-﻿using DotNetSimulator.Units;
+﻿using DotNetSimulator.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DotNetSimulator.Simulator
 {
-    internal interface ISimulationElement
+    internal class SimulationLogic
     {
-        void SimulateStep(TimeStep step, List<IProducer> producer);
+        private DAG<INetworkNode> powerGrid;
     }
 }
