@@ -9,6 +9,10 @@ namespace DotNetSimulator.Simulator
 {
     internal interface ISimulationElement
     {
-        void SimulateStep(TimeStep step, List<IProducer> producer);
+        void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers);
+        KWH Produce();
+        void Consume(KWH amount);
+
+        string GetName();
     }
 }

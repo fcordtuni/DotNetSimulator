@@ -54,7 +54,7 @@ namespace DotNetSimulator.Utils
             incomingEdges[toNode].Add(fromNode);
         }
 
-        private ISet<T> OutgoingNodes(T node)
+        public ISet<T> OutgoingNodes(T node)
         {
             if(outgoingEdges.ContainsKey(node))
             {
@@ -63,7 +63,7 @@ namespace DotNetSimulator.Utils
             return new HashSet<T>();
         }
 
-        private ISet<T> IncomingNodes(T node) 
+        public ISet<T> IncomingNodes(T node) 
         { 
             if(incomingEdges.ContainsKey(node))
             {

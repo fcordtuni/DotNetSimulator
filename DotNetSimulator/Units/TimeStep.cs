@@ -14,5 +14,8 @@ namespace DotNetSimulator.Units
         public TimeSpan Duration { get; private set; }
 
         public TimeStep(DateTime start, DateTime end) { Start = start; End = end; Duration = end - start; }
+        public TimeStep(DateTime start, TimeSpan duration) { Start = start; End = start + duration; Duration = duration; }
+
+        public TimeStep Next(TimeSpan duration) { return new TimeStep(End, duration); }
     }
 }

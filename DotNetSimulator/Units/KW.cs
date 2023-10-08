@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace DotNetSimulator.Units
 {
+    public enum Current
+    {
+        DC,
+        AC
+    }
     public struct KW
     {
         public double Amount { get; private set; }
-        public KW(double amount) { this.Amount = amount; }
+        public Current Current { get; private set; }
+        public KW(double amount, Current current) { this.Amount = amount; this.Current = current; }
 
 
         public KWH forTimeSpan(TimeSpan time)
