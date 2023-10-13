@@ -1,32 +1,26 @@
 ﻿using DotNetSimulator.Units;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotNetSimulator.Simulator.Elements
 {
     internal class Battery : ISimulationElement
     {
-        private readonly KWH capacity;
-        private KWH currentLevel;
-        private readonly String name;
+        private readonly KWH _capacity;
+        private KWH _currentLevel;
+        private readonly string _name;
 
         public Battery(KWH capacity, string name)
         {
-            this.name = name;
-            this.capacity = capacity;
-            currentLevel = KWH.Zero;
+            this._name = name;
+            this._capacity = capacity;
+            _currentLevel = KWH.Zero;
         }
 
-        public string Name { get => "Battery " + name; }
+        public string Name => "Battery " + _name;
 
         public KWH GetProduction(KWH maxAmount)
         {
-            KWH providablePower = KWH.Min(maxAmount, currentLevel);
-            currentLevel -= providablePower;
+            var providablePower = KWH.Min(maxAmount, _currentLevel);
+            _currentLevel -= providablePower;
             return providablePower;
         }
 
@@ -35,7 +29,7 @@ namespace DotNetSimulator.Simulator.Elements
             //for now: accept all power!
             foreach(var producer in producers)
             {
-                currentLevel += producer.GetProduction(capacity - currentLevel);
+                _currentLevel += producer.GetProduction(_capacity - _currentLevel);
             }
         }
     }

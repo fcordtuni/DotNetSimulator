@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DotNetSimulator.Units
+﻿namespace DotNetSimulator.Units
 {
-    public struct KW
+    public readonly struct KW
     {
-        public double Amount { get; private set; }
+        public double Amount { get; }
         public KW(double amount) { Amount = amount; }
 
 
-        public readonly KWH ForTimeSpan(TimeSpan time) => new(this, time);
+        public KWH ForTimeSpan(TimeSpan time) => new(this, time);
 
         public static KWH operator *(KW kw, TimeSpan time) => kw.ForTimeSpan(time);
 

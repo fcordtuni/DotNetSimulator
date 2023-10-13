@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DotNetSimulator.Units
+﻿namespace DotNetSimulator.Units
 {
-    internal struct TimeStep
+    internal readonly struct TimeStep
     {
-        public DateTime Start { get; private set; }
-        public DateTime End { get; private set; }
+        public DateTime Start { get; }
+        public DateTime End { get; }
 
-        public TimeSpan Duration { get; private set; }
+        public TimeSpan Duration { get; }
 
         public TimeStep(DateTime start, DateTime end) { Start = start; End = end; Duration = end - start; }
         public TimeStep(DateTime start, TimeSpan duration) { Start = start; End = start + duration; Duration = duration; }
 
-        public readonly TimeStep Next(TimeSpan duration) => new(End, duration);
+        public TimeStep Next(TimeSpan duration) => new(End, duration);
 
-        public override readonly string ToString()
+        public override string ToString()
         {
-            return Start.ToString() + " - " + End.ToString();
+            return Start + " - " + End;
         }
     }
 }

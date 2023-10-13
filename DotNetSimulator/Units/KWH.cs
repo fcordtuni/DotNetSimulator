@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace DotNetSimulator.Units
 {
     public class KWH
     {
-        public double Amount { get; private set; }
+        public double Amount { get; }
 
         public KWH(double amount) { Amount = amount; }
 
@@ -24,30 +18,22 @@ namespace DotNetSimulator.Units
 
         public static KWH Max(KWH left, KWH right)
         {
-            if(left.Amount >= right.Amount)
-            {
-                return left;
-            }
-            return right;
+            return left.Amount >= right.Amount ? left : right;
         }
 
         public static KWH Min(KWH left, KWH right)
         {
-            if(left.Amount <= right.Amount)
-            {
-                return left;
-            }
-            return right;
+            return left.Amount <= right.Amount ? left : right;
         }
 
         public static KWH operator -(KWH left, KWH right)
         {
-            return new(left.Amount - right.Amount);
+            return new KWH(left.Amount - right.Amount);
         }
 
         public static KWH operator +(KWH left, KWH right)
         {
-            return new(left.Amount + right.Amount);
+            return new KWH(left.Amount + right.Amount);
         }
 
         public override string ToString()

@@ -4,27 +4,27 @@ namespace DotNetSimulator.Simulator.Elements
 {
     internal class PowerConverter : ISimulationElement
     {
-        private readonly string name;
-        private KWH stepProduction;
+        private readonly string _name;
+        private KWH _stepProduction;
 
         public PowerConverter(string name)
         {
-            this.stepProduction = KWH.Zero;
-            this.name = name;
+            this._stepProduction = KWH.Zero;
+            this._name = name;
         }
 
-        public string Name { get => "Power Converter " + name; }
+        public string Name => "Power Converter " + _name;
 
         public KWH GetProduction(KWH maxAmount)
         {
-            KWH providablePower = KWH.Min(maxAmount, stepProduction);
-            stepProduction -= providablePower;
+            var providablePower = KWH.Min(maxAmount, _stepProduction);
+            _stepProduction -= providablePower;
             return providablePower;
         }
 
         public void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers)
         {
-            stepProduction = producers.Select(x => x.GetProduction()).Aggregate((x, y) => x + y);
+            _stepProduction = producers.Select(x => x.GetProduction()).Aggregate((x, y) => x + y);
         }
     }
 }
