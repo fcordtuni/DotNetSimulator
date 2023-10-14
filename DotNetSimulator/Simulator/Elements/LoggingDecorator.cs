@@ -8,14 +8,14 @@ namespace DotNetSimulator.Simulator.Elements
 
         public LoggingDecorator(ISimulationElement decoratee)
         {
-            this._decoratee = decoratee;
+            _decoratee = decoratee;
         }
 
         public string Name => _decoratee.Name;
 
         public KWH GetProduction(KWH maxAmount)
         {
-            KWH produced = _decoratee.GetProduction(maxAmount);
+            var produced = _decoratee.GetProduction(maxAmount);
             Console.WriteLine(_decoratee.Name + ": produced " +  produced + "!");
             return produced;
         }

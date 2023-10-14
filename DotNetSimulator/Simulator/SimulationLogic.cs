@@ -1,5 +1,4 @@
-﻿using DotNetSimulator.Simulator.Elements;
-using DotNetSimulator.Units;
+﻿using DotNetSimulator.Units;
 using DotNetSimulator.Utils;
 
 namespace DotNetSimulator.Simulator
@@ -7,35 +6,54 @@ namespace DotNetSimulator.Simulator
     internal class SimulationLogic
     {
         private readonly DAG<ISimulationElement> _powerGrid;
+        private IList<ISimulationElement> _simulationOrder;
         public SimulationLogic() 
         { 
             _powerGrid = new DAG<ISimulationElement>();
-            //for now: add some stuff here
-            var sp1 = new LoggingDecorator(new SolarPanel(new KW(10), "1"));
-            var sp2 = new LoggingDecorator(new SolarPanel(new KW(14), "2"));
-            var sp3 = new LoggingDecorator(new SolarPanel(new KW(7), "3"));
-            var pc1 = new LoggingDecorator(new PowerConverter("1"));
-            var bt1 = new LoggingDecorator(new Battery(new KWH(1000), "2"));
-            _powerGrid.AddEdge(sp1, pc1);
-            _powerGrid.AddEdge(sp2, pc1);
-            _powerGrid.AddEdge(sp3, pc1);
-            _powerGrid.AddEdge(pc1, bt1);
+            _simulationOrder = new List<ISimulationElement>();
         }
 
-        public void Simulate(DateTime from, DateTime to, TimeSpan stepSize)
+        private void OrderGrid()
         {
-            var orderedNodes = _powerGrid.TopologicalSort();
-            TimeStep step = new(from, from + stepSize);
-            while(step.Start < to)
+            _simulationOrder = _powerGrid.TopologicalSort();
+        }
+
+        public void AddLink(ISimulationElement from, ISimulationElement to)
+        {
+            _powerGrid.AddEdge(from, to);
+            OrderGrid();
+        }
+
+        public void AddLinks((ISimulationElement, ISimulationElement)[] links)
+        {
+            foreach (var link in links)
             {
-                Console.WriteLine("Simulating " + step);
-                SimulateStep(step, orderedNodes);
-                step = step.Next(stepSize);
+                _powerGrid.AddEdge(link.Item1, link.Item2);
             }
 
+            OrderGrid();
         }
 
-        private void SimulateStep(TimeStep step, List<ISimulationElement> orderedNodes)
+        private static void WaitForTime(DateTime time)
+        {
+            while (DateTime.Now < time)
+            {
+                Thread.Sleep(1);
+            }
+        }
+
+        public void RealTimeSimulation(DateTime start, TimeSpan stepSize)
+        {
+            var simulationStep = new TimeStep(start, stepSize);
+            while (true)
+            {
+                WaitForTime(simulationStep.End);
+                SimulateStep(simulationStep, _simulationOrder);
+                simulationStep = simulationStep.Next(stepSize);
+            }
+        }
+
+        private void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> orderedNodes)
         {
             foreach(var currentNode in orderedNodes)
             {

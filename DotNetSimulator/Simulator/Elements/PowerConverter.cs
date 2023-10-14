@@ -9,8 +9,8 @@ namespace DotNetSimulator.Simulator.Elements
 
         public PowerConverter(string name)
         {
-            this._stepProduction = KWH.Zero;
-            this._name = name;
+            _stepProduction = KWH.Zero;
+            _name = name;
         }
 
         public string Name => "Power Converter " + _name;
