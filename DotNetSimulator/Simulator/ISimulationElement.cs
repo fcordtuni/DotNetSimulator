@@ -8,7 +8,5 @@ namespace DotNetSimulator.Simulator
         KWH GetProduction(KWH maxAmount);
 
         public KWH GetProduction() => GetProduction(KWH.Infinity);
-
-        string Name { get; }
     }
 }

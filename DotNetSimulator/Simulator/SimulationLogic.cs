@@ -1,5 +1,6 @@
 ﻿using DotNetSimulator.Units;
 using DotNetSimulator.Utils;
+using Serilog;
 
 namespace DotNetSimulator.Simulator
 {
@@ -21,6 +22,7 @@ namespace DotNetSimulator.Simulator
         public void AddLink(ISimulationElement from, ISimulationElement to)
         {
             _powerGrid.AddEdge(from, to);
+            Log.Information("Adding link {from} - {to}", from, to);
             OrderGrid();
         }
 
@@ -29,6 +31,7 @@ namespace DotNetSimulator.Simulator
             foreach (var link in links)
             {
                 _powerGrid.AddEdge(link.Item1, link.Item2);
+                Log.Information("Adding link {from} - {to}", link.Item1, link.Item2);
             }
 
             OrderGrid();
@@ -48,6 +51,7 @@ namespace DotNetSimulator.Simulator
             while (true)
             {
                 WaitForTime(simulationStep.End);
+                Log.Information("Simulating Step {step}", simulationStep);
                 SimulateStep(simulationStep, _simulationOrder);
                 simulationStep = simulationStep.Next(stepSize);
             }

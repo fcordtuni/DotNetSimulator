@@ -39,7 +39,6 @@ namespace DotNetSimulator.Units
         public override string ToString()
         {
             var formatter = CultureInfo.CreateSpecificCulture("de-DE");
-            formatter.NumberFormat.NumberDecimalDigits = 2;
             return Amount.ToString(formatter) + " KWH";
         }
     }

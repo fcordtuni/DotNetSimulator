@@ -1,4 +1,5 @@
 ﻿using DotNetSimulator.Units;
+using Serilog;
 
 namespace DotNetSimulator.Simulator.Elements
 {
@@ -10,20 +11,19 @@ namespace DotNetSimulator.Simulator.Elements
         private KWH _currentStepMaximumOutput;
         private KWH _currentStepOutput;
         private KWH _currentChargeLevel;
-        private readonly string _name;
+        private readonly string _serial;
 
-        public Battery(KWH capacity, string name, KW maximumOutput, KW maximumInput)
+        public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput)
         {
-            _name = name;
             _maximumOutput = maximumOutput;
             _maximumInput = maximumInput;
             _capacity = capacity;
             _currentChargeLevel = KWH.Zero;
             _currentStepMaximumOutput = KWH.Zero;
             _currentStepOutput = KWH.Zero;
+            _serial = serial;
+            Log.Information("{this}: Created Battery with capacity of {capacity} and maximum IO of {input} / {output}", this, capacity, maximumInput, maximumOutput);
         }
-
-        public string Name => "Battery " + _name;
 
         private KWH CalculateMaximumOutput(KWH maxAmount)
         {
@@ -37,6 +37,7 @@ namespace DotNetSimulator.Simulator.Elements
             var providablePower = CalculateMaximumOutput(maxAmount);
             _currentChargeLevel -= providablePower;
             _currentStepOutput += providablePower;
+            Log.Debug("{this}: Providing {amount}", this, providablePower);
             return providablePower;
         }
 
@@ -50,9 +51,15 @@ namespace DotNetSimulator.Simulator.Elements
         public void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers)
         {
             var maximumInput = CalculateMaximumInput(step);
-            var currentInput = producers.Aggregate(KWH.Zero, (current, producer) => current + producer.GetProduction(maximumInput - current));
-            _currentChargeLevel += currentInput;
+            var totalInput = producers.Aggregate(KWH.Zero, (current, producer) => current + producer.GetProduction(maximumInput - current));
+            Log.Debug("{this}: Consuming {amount}", this, totalInput);
+            _currentChargeLevel += totalInput;
             _currentStepMaximumOutput = _maximumOutput * step.Duration;
+        }
+
+        public override string ToString()
+        {
+            return "Battery " + _serial;
         }
     }
 }
