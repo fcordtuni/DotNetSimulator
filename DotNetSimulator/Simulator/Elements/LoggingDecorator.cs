@@ -15,7 +15,7 @@ namespace DotNetSimulator.Simulator.Elements
 
         public KWH GetProduction(KWH maxAmount)
         {
-            KWH produced = _decoratee.GetProduction(maxAmount);
+            var produced = _decoratee.GetProduction(maxAmount);
             Console.WriteLine(_decoratee.Name + ": produced " +  produced + "!");
             return produced;
         }
