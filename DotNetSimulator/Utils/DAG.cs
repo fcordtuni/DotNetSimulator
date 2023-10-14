@@ -23,7 +23,6 @@
 
         public void AddNode(T node)
         {
-            if (_nodes.Contains(node)) throw new ArgumentException("Node already exists!");
             _nodes.Add(node);
         }
 
@@ -31,11 +30,11 @@
         {
             if (fromNode == null) throw new ArgumentNullException(nameof(fromNode));
             if (toNode == null) throw new ArgumentNullException(nameof(toNode));
-            if (!_nodes.Contains(fromNode)) AddNode(fromNode);
-            if (!_nodes.Contains(toNode)) AddNode(toNode);
+            AddNode(fromNode);
+            AddNode(toNode);
 
             //is there a way to add it more easily, like javas compute if absent?
-            if(!_outgoingEdges.ContainsKey(fromNode)) _outgoingEdges.Add(fromNode, new HashSet<T>());
+            if (!_outgoingEdges.ContainsKey(fromNode)) _outgoingEdges.Add(fromNode, new HashSet<T>());
             _outgoingEdges[fromNode].Add(toNode);
             if(!_incomingEdges.ContainsKey(toNode)) _incomingEdges.Add(toNode, new HashSet<T>());
             _incomingEdges[toNode].Add(fromNode);

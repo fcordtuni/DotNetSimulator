@@ -8,7 +8,7 @@ namespace DotNetSimulator.Simulator.Elements
 
         public LoggingDecorator(ISimulationElement decoratee)
         {
-            this._decoratee = decoratee;
+            _decoratee = decoratee;
         }
 
         public string Name => _decoratee.Name;

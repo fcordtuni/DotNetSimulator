@@ -10,8 +10,8 @@ namespace DotNetSimulator.Simulator.Elements
 
         public Battery(KWH capacity, string name)
         {
-            this._name = name;
-            this._capacity = capacity;
+            _name = name;
+            _capacity = capacity;
             _currentLevel = KWH.Zero;
         }
 
