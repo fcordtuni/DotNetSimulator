@@ -1,41 +1,36 @@
 ﻿using System;
 using EasyModbus;
 
-namespace ModbusNamespace
+public class ModBusServer
 {
-    public class ModbusServer
+    private ModBusServer modbusServer;
+
+    public ModBusServer(int port)
     {
-        private ModbusServer modbusServer;
+        modbusServer = new ModBusServer(port);
+    }
 
-        public ModbusServer(int port)
+    public void StartServer()
+    {
+        try
         {
-            modbusServer = new ModbusServer(port);
+            Console.WriteLine("Modbus Server gestartet. Warten auf Verbindungen...");
         }
-
-        public void StartServer()
+        catch (Exception ex)
         {
-            try
-            {
-                Console.WriteLine("Modbus Server gestartet. Warten auf Verbindungen...");
-                modbusServer.Listen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fehler beim Starten des Modbus-Servers: " + ex.Message);
-            }
+            Console.WriteLine("Fehler beim Starten des Modbus-Servers: " + ex.Message);
         }
+    }
 
-        public void StopServer()
+    public void StopServer()
+    {
+        try
         {
-            try
-            {
-                modbusServer.StopListening();
-                Console.WriteLine("Modbus Server gestoppt.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fehler beim Stoppen des Modbus-Servers: " + ex.Message);
-            }
+            Console.WriteLine("Modbus Server gestoppt.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Fehler beim Stoppen des Modbus-Servers: " + ex.Message);
         }
     }
 }
