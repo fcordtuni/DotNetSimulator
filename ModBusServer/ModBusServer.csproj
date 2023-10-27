@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModBusRegisters.cs" />
+    <Compile Include="IDeviceModBus.cs" />
     <Compile Include="ModBusServer.cs" />
-    <Compile Include="ModuBusRegisters2.cs" />
+    <Compile Include="ModBusRegisters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
