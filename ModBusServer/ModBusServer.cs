@@ -1,23 +1,31 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 
-public class ModBusServer
+public class ModbusServer
 {
-    private ModBusServer modbusServer;
+    private TcpListener tcpListener;
 
-    public ModBusServer(int port)
+    public ModbusServer(int port)
     {
-        modbusServer = new ModBusServer(port);
+        tcpListener = new TcpListener(IPAddress.Any, port);
     }
 
     public void StartServer()
     {
         try
         {
-            Console.WriteLine("Modbus Server gestartet. Warten auf Verbindungen...");
+            tcpListener.Start();
+            Console.WriteLine("Modbus Server gestartet. Warten auf Verbindung...");
+            while (true)
+            {
+                TcpClient client = tcpListener.AcceptTcpClient();
+                Console.WriteLine("Neue Verbindung hergestellt.");
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Fehler beim Starten des Modbus-Servers: " + ex.Message);
+            Console.WriteLine("Fehler beim Starten des Modbus Servers: " + ex.Message);
         }
     }
 
@@ -25,11 +33,12 @@ public class ModBusServer
     {
         try
         {
+            tcpListener.Stop();
             Console.WriteLine("Modbus Server gestoppt.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Fehler beim Stoppen des Modbus-Servers: " + ex.Message);
+            Console.WriteLine("Fehler beim Stoppen des Modbus Servers: " + ex.Message);
         }
     }
 }
