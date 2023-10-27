@@ -2,43 +2,47 @@
 using System.Net;
 using System.Net.Sockets;
 
-public class ModbusServer
+namespace ModBusServer
 {
-    private TcpListener tcpListener;
-
-    public ModbusServer(int port)
+    public class ModBusServer
     {
-        tcpListener = new TcpListener(IPAddress.Any, port);
-    }
+        private TcpListener tcpListener;
 
-    public void StartServer()
-    {
-        try
+        public ModBusServer(int port)
         {
-            tcpListener.Start();
-            Console.WriteLine("Modbus Server gestartet. Warten auf Verbindung...");
-            while (true)
+            tcpListener = new TcpListener(IPAddress.Any, port);
+        }
+
+        public void StartServer()
+        {
+            try
             {
-                TcpClient client = tcpListener.AcceptTcpClient();
-                Console.WriteLine("Neue Verbindung hergestellt.");
+                tcpListener.Start();
+                Console.WriteLine("Modbus Server gestartet. Warten auf Verbindung...");
+                while (true)
+                {
+                    TcpClient client = tcpListener.AcceptTcpClient();
+                    Console.WriteLine("Neue Verbindung hergestellt.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Fehler beim Starten des Modbus Servers: " + ex.Message);
             }
         }
-        catch (Exception ex)
+
+        public void StopServer()
         {
-            Console.WriteLine("Fehler beim Starten des Modbus Servers: " + ex.Message);
+            try
+            {
+                tcpListener.Stop();
+                Console.WriteLine("Modbus Server gestoppt.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Fehler beim Stoppen des Modbus Servers: " + ex.Message);
+            }
         }
     }
 
-    public void StopServer()
-    {
-        try
-        {
-            tcpListener.Stop();
-            Console.WriteLine("Modbus Server gestoppt.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Fehler beim Stoppen des Modbus Servers: " + ex.Message);
-        }
-    }
 }
