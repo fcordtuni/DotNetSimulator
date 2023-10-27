@@ -1,4 +1,5 @@
 ﻿using DotNetSimulator.Units;
+using Serilog;
 
 namespace DotNetSimulator.Simulator.Elements
 {
@@ -6,15 +7,14 @@ namespace DotNetSimulator.Simulator.Elements
     {
         private readonly KW _maxProduction;
         private KWH _stepProduction;
-        private readonly string _name;
+        private string _serial;
 
-        public string Name => "Solar Panel " + _name;
-
-        public SolarPanel(KW maxProduction, string name) 
+        public SolarPanel(string serial, KW maxProduction) 
         {
             _maxProduction = maxProduction;
             _stepProduction = KWH.Zero;
-            _name = name;
+            _serial = serial;
+            Log.Information("{this}: Created Solar Panel with {maxProd} max production", this, maxProduction);
         }
 
         public KWH GetProduction(KWH maxAmount)
@@ -22,6 +22,7 @@ namespace DotNetSimulator.Simulator.Elements
             var providablePower = KWH.Min(maxAmount, _stepProduction);
 
             _stepProduction -= providablePower;
+            Log.Debug("{this}: Providing {amount}", this, _stepProduction);
             return providablePower;
         }
 
@@ -46,6 +47,12 @@ namespace DotNetSimulator.Simulator.Elements
         {
             //resetting current Production
             _stepProduction = (GetTotalProductionForTimeOfDay(step.End.TimeOfDay) - GetTotalProductionForTimeOfDay(step.Start.TimeOfDay)) * _maxProduction * step.Duration;
+            Log.Debug("{this}: Producing {amount}", this, _stepProduction);
+        }
+
+        public override string ToString()
+        {
+            return "Solar Panel " + _serial;
         }
     }
 }

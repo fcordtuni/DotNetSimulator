@@ -1,4 +1,6 @@
-﻿namespace DotNetSimulator.Units
+﻿using System.Globalization;
+
+namespace DotNetSimulator.Units
 {
     public readonly struct KW
     {
@@ -12,5 +14,11 @@
 
         public static KW operator *(KW left, double right) => new(left.Amount * right);
         public static KW operator *(double left, KW right) => right * left;
+
+        public override string ToString()
+        {
+            var formatter = CultureInfo.CreateSpecificCulture("de-DE");
+            return Amount.ToString(formatter) + " KW";
+        }
     }
 }
