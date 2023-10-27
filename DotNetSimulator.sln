@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetSimulator", "DotNetSimulator\DotNetSimulator.csproj", "{A3DDE4A7-6CD7-4272-95B2-7D7694F887E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBusServer", "ModBusServer\ModBusServer.csproj", "{41353657-F71D-4E4C-A06E-C7868C89DC83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBus", "ModBusServer\ModBus.csproj", "{41353657-F71D-4E4C-A06E-C7868C89DC83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
