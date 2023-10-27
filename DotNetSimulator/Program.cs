@@ -2,12 +2,10 @@
 using DotNetSimulator.Simulator;
 using DotNetSimulator.Simulator.Elements;
 using DotNetSimulator.Units;
-using Serilog;
+using NLog;
+using NLog.Web;
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .MinimumLevel.Debug()
-    .CreateLogger();
+LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
 SimulationLogic logic = new();
 var sp1 = new SolarPanel("SP1", new KW(0.2));

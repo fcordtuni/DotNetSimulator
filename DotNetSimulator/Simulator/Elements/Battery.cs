@@ -1,5 +1,6 @@
 ﻿using DotNetSimulator.Units;
-using Serilog;
+using NLog;
+using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator.Elements
 {
@@ -12,6 +13,7 @@ namespace DotNetSimulator.Simulator.Elements
         private KWH _currentStepOutput;
         private KWH _currentChargeLevel;
         private readonly string _serial;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput)
         {
@@ -22,7 +24,7 @@ namespace DotNetSimulator.Simulator.Elements
             _currentStepMaximumOutput = KWH.Zero;
             _currentStepOutput = KWH.Zero;
             _serial = serial;
-            Log.Information("{this}: Created Battery with capacity of {capacity} and maximum IO of {input} / {output}", this, capacity, maximumInput, maximumOutput);
+            Logger.Info("{this}: Created Battery with capacity of {capacity} and maximum IO of {input} / {output}", this, capacity, maximumInput, maximumOutput);
         }
 
         private KWH CalculateMaximumOutput(KWH maxAmount)
@@ -37,7 +39,7 @@ namespace DotNetSimulator.Simulator.Elements
             var providablePower = CalculateMaximumOutput(maxAmount);
             _currentChargeLevel -= providablePower;
             _currentStepOutput += providablePower;
-            Log.Debug("{this}: Providing {amount}", this, providablePower);
+            Logger.Debug("{this}: Providing {amount}", this, providablePower);
             return providablePower;
         }
 
@@ -52,7 +54,7 @@ namespace DotNetSimulator.Simulator.Elements
         {
             var maximumInput = CalculateMaximumInput(step);
             var totalInput = producers.Aggregate(KWH.Zero, (current, producer) => current + producer.GetProduction(maximumInput - current));
-            Log.Debug("{this}: Consuming {amount}", this, totalInput);
+            Logger.Debug("{this}: Consuming {amount}", this, totalInput);
             _currentChargeLevel += totalInput;
             _currentStepMaximumOutput = _maximumOutput * step.Duration;
         }

@@ -1,6 +1,7 @@
 ﻿using DotNetSimulator.Units;
 using DotNetSimulator.Utils;
-using Serilog;
+using NLog;
+using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator
 {
@@ -8,6 +9,7 @@ namespace DotNetSimulator.Simulator
     {
         private readonly DAG<ISimulationElement> _powerGrid;
         private IList<ISimulationElement> _simulationOrder;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         public SimulationLogic() 
         { 
             _powerGrid = new DAG<ISimulationElement>();
@@ -22,7 +24,7 @@ namespace DotNetSimulator.Simulator
         public void AddLink(ISimulationElement from, ISimulationElement to)
         {
             _powerGrid.AddEdge(from, to);
-            Log.Information("Adding link {from} - {to}", from, to);
+            Logger.Info("Adding link {from} - {to}", from, to);
             OrderGrid();
         }
 
@@ -31,7 +33,7 @@ namespace DotNetSimulator.Simulator
             foreach (var link in links)
             {
                 _powerGrid.AddEdge(link.Item1, link.Item2);
-                Log.Information("Adding link {from} - {to}", link.Item1, link.Item2);
+                Logger.Info("Adding link {from} - {to}", link.Item1, link.Item2);
             }
 
             OrderGrid();
@@ -51,7 +53,7 @@ namespace DotNetSimulator.Simulator
             while (true)
             {
                 WaitForTime(simulationStep.End);
-                Log.Information("Simulating Step {step}", simulationStep);
+                Logger.Info("Simulating Step {step}", simulationStep);
                 SimulateStep(simulationStep, _simulationOrder);
                 simulationStep = simulationStep.Next(stepSize);
             }
