@@ -1,4 +1,8 @@
-﻿namespace ModBusServer
+﻿/// <summary>
+/// Autor: Elisabeth Gisser
+/// </summary>
+
+namespace ModBusServer
 {
     /// <summary>
     /// Enum representing Modbus register addresses

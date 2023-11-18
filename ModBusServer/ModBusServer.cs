@@ -1,4 +1,8 @@
-﻿using System;
+﻿/// <summary>
+/// Autor: Elisabeth Gisser
+/// </summary>
+
+using System;
 using System.Net;
 using System.Net.Sockets;
 
