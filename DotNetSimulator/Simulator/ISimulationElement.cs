@@ -1,7 +1,9 @@
-﻿using DotNetSimulator.Units;
+﻿//Author: FCORDT
+using DotNetSimulator.Units;
 
 namespace DotNetSimulator.Simulator
 {
+
     internal interface ISimulationElement
     {
         void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers);

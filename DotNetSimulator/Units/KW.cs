@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿//Author: FCORDT
+using System.Globalization;
 
 namespace DotNetSimulator.Units
 {

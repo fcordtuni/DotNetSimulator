@@ -1,4 +1,5 @@
-﻿namespace DotNetSimulator.Utils
+﻿//Author: FCORDT
+namespace DotNetSimulator.Utils
 {
     /// <summary>
     /// Bare-bone implementation of a DAG:

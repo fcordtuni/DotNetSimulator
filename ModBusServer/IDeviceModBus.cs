@@ -1,7 +1,6 @@
 ﻿/// <summary>
 /// Autor: Elisabeth Gisser
 /// </summary>
-
 namespace ModBusServer
 {
     /// <summary>

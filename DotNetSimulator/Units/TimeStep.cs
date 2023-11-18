@@ -1,4 +1,5 @@
-﻿namespace DotNetSimulator.Units
+﻿//Author: FCORDT
+namespace DotNetSimulator.Units
 {
     internal readonly struct TimeStep
     {

@@ -1,4 +1,5 @@
-﻿using DotNetSimulator.Units;
+﻿//Author: FCORDT
+using DotNetSimulator.Units;
 using NLog;
 using ILogger = NLog.ILogger;
 

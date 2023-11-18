@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿//Author: FCORDT
 using DotNetSimulator.Simulator;
 using DotNetSimulator.Simulator.Elements;
 using DotNetSimulator.Units;
