@@ -4,45 +4,67 @@ using System.Net.Sockets;
 
 namespace ModBusServer
 {
-    public class ModBusServer
+    /// <summary>
+    /// Represents a Modbus server that listens for client connections
+    /// </summary>
+    public class ModbusServer
     {
-        private TcpListener tcpListener;
+        private TcpListener listener;
+        private IDeviceModbus deviceRegisters;
 
-        public ModBusServer(int port)
+        /// <summary>
+        /// Constructor for ModbusServer class
+        /// </summary>
+        /// <param name="device">An instance of a device implementing the IDeviceModbus interface</param>
+        public ModbusServer(IDeviceModbus device)
         {
-            tcpListener = new TcpListener(IPAddress.Any, port);
+            deviceRegisters = device;
         }
 
-        public void StartServer()
+        /// <summary>
+        /// Starts the Modbus server on the specified port and waits for client connections
+        /// </summary>
+        /// <param name="port">The port number to listen for incoming connections</param>
+        public void Start(int port)
         {
             try
             {
-                tcpListener.Start();
-                Console.WriteLine("Modbus Server gestartet. Warten auf Verbindung...");
+                listener = new TcpListener(IPAddress.Any, port);
+                listener.Start();
+
+                Console.WriteLine($"Modbus Server gestartet. Warte auf Verbindungen auf Port {port}");
+
                 while (true)
                 {
-                    TcpClient client = tcpListener.AcceptTcpClient();
-                    Console.WriteLine("Neue Verbindung hergestellt.");
+                    TcpClient client = listener.AcceptTcpClient();
+                    Console.WriteLine($"Client verbunden: {((IPEndPoint)client.Client.RemoteEndPoint).Address}");
+
+                    HandleClient(client);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Fehler beim Starten des Modbus Servers: " + ex.Message);
+                Console.WriteLine($"Fehler beim Starten des Servers: {ex.Message}");
             }
         }
 
-        public void StopServer()
+        /// <summary>
+        /// Handles communication with a connected client
+        /// </summary>
+        /// <param name="client">The TcpClient representing the connected client</param>
+        private void HandleClient(TcpClient client)
         {
-            try
-            {
-                tcpListener.Stop();
-                Console.WriteLine("Modbus Server gestoppt.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fehler beim Stoppen des Modbus Servers: " + ex.Message);
-            }
+            int registerAddress = 0x0001;
+            int value = deviceRegisters.GetValueByAddress((ModbusRegistersAddresses)registerAddress);
+        }
+
+        /// <summary>
+        /// Stops the Modbus server
+        /// </summary>
+        public void Stop()
+        {
+            listener?.Stop();
+            Console.WriteLine("Modbus Server gestoppt.");
         }
     }
-
 }

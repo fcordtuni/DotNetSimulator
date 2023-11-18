@@ -1,88 +1,67 @@
-﻿using EasyModbus;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ModBusServer
 {
-    public class ModBusRegister
+    /// <summary>
+    /// Class representing Modbus registers and implementing the IDeviceModbus interface
+    /// </summary>
+    public class ModbusRegisters : IDeviceModbus
     {
-        private ModbusClient modbusClient;
-        private Dictionary<string, int> registers;
+        private Dictionary<ModbusRegistersAddresses, int> registers = new Dictionary<ModbusRegistersAddresses, int>();
 
-        public ModBusRegister(string ipAddress, int modbusPort)
+        /// <summary>
+        /// Constructor for ModbusRegisters class
+        /// </summary>
+        public ModbusRegisters()
         {
-            modbusClient = new ModbusClient(ipAddress, modbusPort);
-
-            registers = new Dictionary<string, int>
-            {
-                // Informationsregister
-                { "Seriennummer", 12345 },
-                { "HerstellerID", 567 },
-                { "ProduktID", 890 },
-                { "ProduktTyp", 1 },
-                { "Versionsnummer", 1 },
-
-                // Kenngrößen
-                { "MaxLeistung", 5000 },
-                { "MaxSpannung", 230 },
-                { "MaxStrom", 20 },
-                { "Wirkungsgrad", 90 },
-                { "Frequenzausgang", 50 },
-
-                // Aktuelle Betriebsgrößen
-                { "Leistungsausgang", 4500 },
-                { "Spannungsausgang", 220 },
-                { "Stromausgang", 18 },
-                { "Frequenz", 50 },
-                { "Betriebsmodus", 0 },
-                { "Betriebsstatus", 1 },
-                { "Temperatur", 25 },
-                { "Fehlercodes", 0 },
-
-                // Betriebsparameter
-                { "Betriebsmoduseinstellung", 0 },
-                { "MaximaleLeistungseinstellung", 5000 },
-                { "Spannungseinstellung", 230 },
-                { "Frequenzeinstellung", 50 },
-                { "Schutzfunktionseinstellungen", 0 },
-                { "Einschaltverzögerung", 5 },
-                { "Kommunikationseinstellungen", 1 },
-                { "UpdateIntervalle", 10 },
-                { "Energiesparmodus", 0 },
-
-                // Funktionsregister
-                { "StartStopFunktion", 0 }
-            };
-
+            InitializeRegisters();
         }
 
-        public int ReadRegister(int registerAddress)
+        /// <summary>
+        /// Initializes registers with default values
+        /// </summary>
+        private void InitializeRegisters()
         {
-            int value = -1;
-
-            try
+            foreach (ModbusRegistersAddresses address in Enum.GetValues(typeof(ModbusRegistersAddresses)))
             {
-                int[] registerValue = modbusClient.ReadHoldingRegisters(registerAddress, 1);
-                value = registerValue[0];
+                registers[address] = 0;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fehler beim Lesen des Registers: " + ex.Message);
-            }
-
-            return value;
         }
 
-        public void WriteRegister(int registerAddress, int value)
+        /// <summary>
+        /// Retrieves the value associated with a Modbus register address
+        /// </summary>
+        /// <param name="address">The Modbus register address</param>
+        /// <returns>The value stored at the specified address</returns>
+        public int GetValueByAddress(ModbusRegistersAddresses address)
         {
-            try
+            if (registers.ContainsKey(address))
             {
-                modbusClient.WriteSingleRegister(registerAddress, (ushort)value);
-                Console.WriteLine("Register " + registerAddress + " auf Wert " + value + " gesetzt.");
+                return registers[address];
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("Fehler beim Schreiben des Registers: " + ex.Message);
+                Console.WriteLine($"Register address {address} not found.");
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Sets the value for a specific Modbus register address
+        /// </summary>
+        /// <param name="address">The Modbus register address</param>
+        /// <param name="value">The value to be set</param>
+        public void SetValueByAddress(ModbusRegistersAddresses address, int value)
+        {
+            if (registers.ContainsKey(address))
+            {
+                registers[address] = value;
+                Console.WriteLine($"Register address {address} set to value: {value}");
+            }
+            else
+            {
+                Console.WriteLine($"Register address {address} not found.");
             }
         }
     }

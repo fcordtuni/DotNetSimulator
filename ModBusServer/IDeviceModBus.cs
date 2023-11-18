@@ -1,34 +1,57 @@
 ﻿namespace ModBusServer
 {
+    /// <summary>
+    /// Enum representing Modbus register addresses
+    /// </summary>
+    public enum ModbusRegistersAddresses
+    {
+        Seriennummer,
+        HerstellerID,
+        ProduktID,
+        ProduktTyp,
+        Versionsnummer,
+        MaxLeistung,
+        MaxSpannung,
+        MaxStrom,
+        Wirkungsgrad,
+        Frequenzausgang,
+        Leistungsausgang,
+        Spannungsausgang,
+        Stromausgang,
+        Frequenz,
+        Betriebsmodus,
+        Betriebsstatus,
+        Temperatur,
+        Fehlercodes,
+        Betriebsmoduseinstellung,
+        MaximaleLeistungseinstellung,
+        Spannungseinstellung,
+        Frequenzeinstellung,
+        Schutzfunktionseinstellungen,
+        Einschaltverzögerung,
+        Kommunikationseinstellungen,
+        UpdateIntervalle,
+        Energiesparmodus,
+        StartStopFunktion
+    }
+
+    /// <summary>
+    /// Interface representing a Modbus device
+    /// </summary>
     public interface IDeviceModbus
     {
-        int Seriennummer { get; }
-        int HerstellerID { get; }
-        int ProduktID { get; }
-        int ProduktTyp { get; }
-        int Versionsnummer { get; }
-        int MaxLeistung { get; }
-        int MaxSpannung { get; }
-        int MaxStrom { get; }
-        int Wirkungsgrad { get; }
-        int Frequenzausgang { get; }
-        int Leistungsausgang { get; }
-        int Spannungsausgang { get; }
-        int Stromausgang { get; }
-        int Frequenz { get; }
-        int Betriebsmodus { get; }
-        int Betriebsstatus { get; }
-        int Temperatur { get; }
-        int Fehlercodes { get; }
-        int Betriebsmoduseinstellung { get; }
-        int MaximaleLeistungseinstellung { get; }
-        int Spannungseinstellung { get; }
-        int Frequenzeinstellung { get; }
-        int Schutzfunktionseinstellungen { get; }
-        int Einschaltverzögerung { get; }
-        int Kommunikationseinstellungen { get; }
-        int UpdateIntervalle { get; }
-        int Energiesparmodus { get; }
-        int StartStopFunktion { get; }
+        /// <summary>
+        /// Retrieves the value associated with a Modbus register address
+        /// </summary>
+        /// <param name="address">The Modbus register address</param>
+        /// <returns>The value stored at the specified address</returns>
+        int GetValueByAddress(ModbusRegistersAddresses address);
+
+        /// <summary>
+        /// Sets the value for a specific Modbus register address
+        /// </summary>
+        /// <param name="address">The Modbus register address</param>
+        /// <param name="value">The value to be set</param>
+        void SetValueByAddress(ModbusRegistersAddresses address, int value);
     }
 }
