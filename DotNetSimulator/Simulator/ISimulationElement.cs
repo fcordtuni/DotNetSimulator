@@ -6,7 +6,7 @@ namespace DotNetSimulator.Simulator
 
     internal interface ISimulationElement
     {
-        void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers);
+        void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers);
         KWH GetProduction(KWH maxAmount);
 
         public KWH GetProduction() => GetProduction(KWH.Infinity);

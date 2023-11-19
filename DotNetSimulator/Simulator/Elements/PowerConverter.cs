@@ -26,7 +26,7 @@ namespace DotNetSimulator.Simulator.Elements
             return providablePower;
         }
 
-        public void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers)
+        public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
         {
             _stepProduction = producers.Select(x => x.GetProduction()).Aggregate((x, y) => x + y);
             Logger.Debug("{this}: Consuming {amount}", this, _stepProduction);

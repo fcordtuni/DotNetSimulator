@@ -51,7 +51,7 @@ namespace DotNetSimulator.Simulator.Elements
             return KWH.Min(remainingCapacity, maximumStepInput);
         }
 
-        public void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers)
+        public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
         {
             var maximumInput = CalculateMaximumInput(step);
             var totalInput = producers.Aggregate(KWH.Zero, (current, producer) => current + producer.GetProduction(maximumInput - current));

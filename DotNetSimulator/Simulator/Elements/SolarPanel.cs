@@ -46,7 +46,7 @@ namespace DotNetSimulator.Simulator.Elements
             };
         }
 
-        public void SimulateStep(TimeStep step, ICollection<ISimulationElement> producers)
+        public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
         {
             //resetting current Production
             _stepProduction = (GetTotalProductionForTimeOfDay(step.End.TimeOfDay) - GetTotalProductionForTimeOfDay(step.Start.TimeOfDay)) * _maxProduction * step.Duration;

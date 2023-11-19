@@ -1,4 +1,6 @@
 ﻿//Author: FCORDT
+
+using DotNetSimulator.Simulator.Time;
 using DotNetSimulator.Units;
 using DotNetSimulator.Utils;
 using NLog;
@@ -8,13 +10,38 @@ namespace DotNetSimulator.Simulator
 {
     internal class SimulationLogic
     {
-        private readonly DAG<ISimulationElement> _powerGrid;
-        private IList<ISimulationElement> _simulationOrder;
+        private readonly DAG<ISimulationElement> _powerGrid = new();
+        private IList<ISimulationElement> _simulationOrder = new List<ISimulationElement>();
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        public SimulationLogic() 
-        { 
-            _powerGrid = new DAG<ISimulationElement>();
-            _simulationOrder = new List<ISimulationElement>();
+        private ISimulationTimer _simulationTimer = new RealTimeSimulationTimer(1, TimeSpan.FromSeconds(1), DateTime.Now);
+        private bool _shouldRun = true;
+        private TimeStep _currentStep;
+
+        public SimulationLogic()
+        {
+
+        }
+
+        public SimulationLogic(ISimulationTimer timer)
+        {
+            _simulationTimer = timer;
+        }
+
+        public void SetFastForward(DateTime endTime, TimeSpan simulationResolution, double realTimeSimulationSpeed)
+        {
+            _simulationTimer =
+                ISimulationTimer.FastForward(_currentStep.End, endTime, simulationResolution)
+                    .AndThen(ISimulationTimer.RealTime(realTimeSimulationSpeed, simulationResolution, endTime));
+        }
+
+        public void SetRealTime(double realTimeSimulationSpeed, TimeSpan simulationResolution)
+        {
+            _simulationTimer = ISimulationTimer.RealTime(realTimeSimulationSpeed, simulationResolution, _currentStep.End);
+        }
+
+        public void Stop()
+        {
+            _shouldRun = false;
         }
 
         private void OrderGrid()
@@ -40,24 +67,15 @@ namespace DotNetSimulator.Simulator
             OrderGrid();
         }
 
-        private static void WaitForTime(DateTime time)
+        public async Task<bool> RunSimulation()
         {
-            while (DateTime.Now < time)
+            while (_shouldRun)
             {
-                Thread.Sleep(1);
+                _currentStep = await _simulationTimer.GetNextStep();
+                Logger.Info("Simulating Step {step}", _currentStep);
+                SimulateStep(_currentStep, _simulationOrder);
             }
-        }
-
-        public void RealTimeSimulation(DateTime start, TimeSpan stepSize)
-        {
-            var simulationStep = new TimeStep(start, stepSize);
-            while (true)
-            {
-                WaitForTime(simulationStep.End);
-                Logger.Info("Simulating Step {step}", simulationStep);
-                SimulateStep(simulationStep, _simulationOrder);
-                simulationStep = simulationStep.Next(stepSize);
-            }
+            return true;
         }
 
         private void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> orderedNodes)
