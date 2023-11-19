@@ -29,7 +29,7 @@ namespace DotNetSimulator.Simulator
             OrderGrid();
         }
 
-        public void AddLinks((ISimulationElement, ISimulationElement)[] links)
+        public void AddLinks(IEnumerable<(ISimulationElement, ISimulationElement)> links)
         {
             foreach (var link in links)
             {
