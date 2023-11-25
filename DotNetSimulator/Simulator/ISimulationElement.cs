@@ -1,14 +1,13 @@
 ﻿//Author: FCORDT
 using DotNetSimulator.Units;
 
-namespace DotNetSimulator.Simulator
+namespace DotNetSimulator.Simulator;
+
+internal interface ISimulationElement
 {
+    void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers);
+    KWH GetProduction(KWH maxAmount);
 
-    internal interface ISimulationElement
-    {
-        void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers);
-        KWH GetProduction(KWH maxAmount);
-
-        public KWH GetProduction() => GetProduction(KWH.Infinity);
-    }
+    public KWH GetProduction() => GetProduction(KWH.Infinity);
+}
 }

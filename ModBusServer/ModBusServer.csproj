@@ -233,9 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDeviceModBus.cs" />
-    <Compile Include="ModBusServer.cs" />
     <Compile Include="ModBusRegisters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimulationModbusServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

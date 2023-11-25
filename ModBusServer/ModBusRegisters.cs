@@ -1,7 +1,4 @@
-﻿/// <summary>
-/// Autor: Elisabeth Gisser
-/// </summary>
-/// 
+﻿// Autor: Elisabeth Gisser
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +9,7 @@ namespace ModBusServer
     /// </summary>
     public class ModbusRegisters : IDeviceModbus
     {
-        private Dictionary<ModbusRegistersAddresses, int> registers = new Dictionary<ModbusRegistersAddresses, int>();
+        private readonly Dictionary<ModbusRegistersAddresses, int> _registers = new Dictionary<ModbusRegistersAddresses, int>();
 
         /// <summary>
         /// Constructor for ModbusRegisters class
@@ -29,7 +26,7 @@ namespace ModBusServer
         {
             foreach (ModbusRegistersAddresses address in Enum.GetValues(typeof(ModbusRegistersAddresses)))
             {
-                registers[address] = 0;
+                _registers[address] = 0;
             }
         }
 
@@ -40,15 +37,13 @@ namespace ModBusServer
         /// <returns>The value stored at the specified address</returns>
         public int GetValueByAddress(ModbusRegistersAddresses address)
         {
-            if (registers.ContainsKey(address))
+            if (_registers.ContainsKey(address))
             {
-                return registers[address];
+                return _registers[address];
             }
-            else
-            {
-                Console.WriteLine($"Register address {address} not found.");
-                return -1;
-            }
+
+            Console.WriteLine($"Register address {address} not found.");
+            throw new ArgumentException("Registeradresse ungültig");
         }
 
         /// <summary>
@@ -58,9 +53,9 @@ namespace ModBusServer
         /// <param name="value">The value to be set</param>
         public void SetValueByAddress(ModbusRegistersAddresses address, int value)
         {
-            if (registers.ContainsKey(address))
+            if (_registers.ContainsKey(address))
             {
-                registers[address] = value;
+                _registers[address] = value;
                 Console.WriteLine($"Register address {address} set to value: {value}");
             }
             else

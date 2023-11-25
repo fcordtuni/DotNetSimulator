@@ -11,7 +11,7 @@ ILogger logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurren
 logger.Info("starting setup");
 
 
-SimulationLogic logic = 
+SimulationLogic logic =
     new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now, TimeSpan.FromSeconds(10))
         .AndThen(ISimulationTimer.RealTime(0.1, TimeSpan.FromSeconds(1), DateTime.Now)));
 var sp1 = new SolarPanel("SP1", new KW(0.2));
@@ -20,7 +20,7 @@ var sp3 = new SolarPanel("SP3", new KW(0.17));
 var pc = new PowerConverter("PC1");
 var bt = new Battery("BT1", new KWH(150), new KW(0.50), new KW(0.1));
 
-logic.AddLinks(new(ISimulationElement, ISimulationElement)[] {(sp1, pc), (sp2, pc), (sp3, pc), (pc, bt)}) ;
+logic.AddLinks(new (ISimulationElement, ISimulationElement)[] { (sp1, pc), (sp2, pc), (sp3, pc), (pc, bt) });
 logger.Info("setup done, running simulation");
-await logic.RunSimulation( );
+await logic.RunSimulation();
 logger.Info("done");

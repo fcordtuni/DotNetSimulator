@@ -1,6 +1,4 @@
-﻿/// <summary>
-/// Autor: Elisabeth Gisser
-/// </summary>
+﻿// Autor: Elisabeth Gisser
 namespace ModBusServer
 {
     /// <summary>
