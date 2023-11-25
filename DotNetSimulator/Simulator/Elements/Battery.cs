@@ -4,6 +4,10 @@ using NLog;
 using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator.Elements;
+
+/// <summary>
+/// This class simulates a Battery
+/// </summary>
 internal class Battery : ISimulationElement
 {
     private readonly KWH _capacity;
@@ -15,6 +19,13 @@ internal class Battery : ISimulationElement
     private readonly string _serial;
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="serial">Unique identifier</param>
+    /// <param name="capacity"></param>
+    /// <param name="maximumOutput"></param>
+    /// <param name="maximumInput"></param>
     public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput)
     {
         _maximumOutput = maximumOutput;
@@ -34,6 +45,7 @@ internal class Battery : ISimulationElement
         return KWH.Min(providablePower, maxAmount);
     }
 
+    /// <inheritdoc />
     public KWH GetProduction(KWH maxAmount)
     {
         var providablePower = CalculateMaximumOutput(maxAmount);
@@ -50,6 +62,7 @@ internal class Battery : ISimulationElement
         return KWH.Min(remainingCapacity, maximumStepInput);
     }
 
+    /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
         var maximumInput = CalculateMaximumInput(step);
@@ -59,6 +72,7 @@ internal class Battery : ISimulationElement
         _currentStepMaximumOutput = _maximumOutput * step.Duration;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return "Battery " + _serial;

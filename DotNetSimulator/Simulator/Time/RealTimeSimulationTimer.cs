@@ -9,7 +9,7 @@ internal class RealTimeSimulationTimer : ISimulationTimer
     private readonly TimeSpan _realTimeTimeSpan;
     private DateTime _nextStep;
 
-    public RealTimeSimulationTimer(double timeFactor, TimeSpan timeSpan, DateTime startTime)
+    internal RealTimeSimulationTimer(double timeFactor, TimeSpan timeSpan, DateTime startTime)
     {
         _timeSpan = timeSpan;
         _startTime = startTime;
@@ -17,11 +17,13 @@ internal class RealTimeSimulationTimer : ISimulationTimer
         _nextStep = DateTime.MinValue;
     }
 
+    /// <inheritdoc />
     public bool HasNextStep()
     {
         return true;
     }
 
+    /// <inheritdoc />
     public async Task<TimeStep> GetNextStep()
     {
         if (_nextStep == DateTime.MinValue)

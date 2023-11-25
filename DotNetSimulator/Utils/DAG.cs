@@ -21,15 +21,23 @@ internal class DAG<T> where T : class
     private readonly IDictionary<T, HashSet<T>> _incomingEdges = new Dictionary<T, HashSet<T>>();
     private readonly IDictionary<T, HashSet<T>> _outgoingEdges = new Dictionary<T, HashSet<T>>();
 
+    /// <summary>
+    /// adds a node to the graph
+    /// </summary>
+    /// <param name="node"></param>
     public void AddNode(T node)
     {
         _nodes.Add(node);
     }
 
-    public void AddEdge(T? fromNode, T? toNode)
+    /// <summary>
+    /// adds an edge between two given nodes
+    /// </summary>
+    /// <param name="fromNode"></param>
+    /// <param name="toNode"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public void AddEdge(T fromNode, T toNode)
     {
-        if (fromNode == null) throw new ArgumentNullException(nameof(fromNode));
-        if (toNode == null) throw new ArgumentNullException(nameof(toNode));
         AddNode(fromNode);
         AddNode(toNode);
 
@@ -40,11 +48,21 @@ internal class DAG<T> where T : class
         _incomingEdges[toNode].Add(fromNode);
     }
 
+    /// <summary>
+    /// get a list of nodes the current node has outgoing edges to
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
     public ISet<T> OutgoingNodes(T node)
     {
         return _outgoingEdges.TryGetValue(node, out var outgoingNodes) ? outgoingNodes : new HashSet<T>();
     }
 
+    /// <summary>
+    /// gets a list of nodes which this node has incomming edges from
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
     public ISet<T> IncomingNodes(T node)
     {
         return _incomingEdges.TryGetValue(node, out var incomingNodes) ? incomingNodes : new HashSet<T>();

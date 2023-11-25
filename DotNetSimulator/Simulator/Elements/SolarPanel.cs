@@ -4,6 +4,10 @@ using NLog;
 using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator.Elements;
+
+/// <summary>
+/// Simulates a Solar Pannel
+/// </summary>
 internal class SolarPanel : ISimulationElement
 {
     private readonly KW _maxProduction;
@@ -11,6 +15,11 @@ internal class SolarPanel : ISimulationElement
     private readonly string _serial;
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="serial"></param>
+    /// <param name="maxProduction"></param>
     public SolarPanel(string serial, KW maxProduction)
     {
         _maxProduction = maxProduction;
@@ -19,6 +28,7 @@ internal class SolarPanel : ISimulationElement
         Logger.Info("{this}: Created Solar Panel with {maxProd} max production", this, maxProduction);
     }
 
+    /// <inheritdoc />
     public KWH GetProduction(KWH maxAmount)
     {
         var providablePower = KWH.Min(maxAmount, _stepProduction);
@@ -45,6 +55,7 @@ internal class SolarPanel : ISimulationElement
         };
     }
 
+    /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
         //resetting current Production
@@ -52,6 +63,7 @@ internal class SolarPanel : ISimulationElement
         Logger.Debug("{this}: Producing {amount}", this, _stepProduction);
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return "Solar Panel " + _serial;

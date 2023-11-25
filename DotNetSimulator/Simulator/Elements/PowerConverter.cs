@@ -4,12 +4,20 @@ using NLog;
 using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator.Elements;
+
+/// <summary>
+/// This Class simulates a Power Converter
+/// </summary>
 internal class PowerConverter : ISimulationElement
 {
     private KWH _stepProduction;
     private readonly string _serial;
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="serial"></param>
     public PowerConverter(string serial)
     {
         _stepProduction = KWH.Zero;
@@ -17,6 +25,8 @@ internal class PowerConverter : ISimulationElement
         Logger.Info("{this}: Created PowerConverter", this);
     }
 
+
+    /// <inheritdoc />
     public KWH GetProduction(KWH maxAmount)
     {
         var providablePower = KWH.Min(maxAmount, _stepProduction);
@@ -25,6 +35,7 @@ internal class PowerConverter : ISimulationElement
         return providablePower;
     }
 
+    /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
         _stepProduction = producers.Select(x => x.GetProduction()).Aggregate((x, y) => x + y);
