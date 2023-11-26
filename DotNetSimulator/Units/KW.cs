@@ -33,6 +33,9 @@ public readonly struct KW
     public static KW operator *(KW left, double right) => new(left.Amount * right);
     public static KW operator *(double left, KW right) => right * left;
 
+    public static readonly KW Infinity = new(double.PositiveInfinity);
+    public static readonly KW Zero = new(0);
+
     /// <inheritdoc/>
     public override string ToString()
     {

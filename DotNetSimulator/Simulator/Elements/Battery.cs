@@ -1,7 +1,9 @@
 ﻿//Author: FCORDT
 using DotNetSimulator.Units;
 using NLog;
+using System.Runtime.CompilerServices;
 using ILogger = NLog.ILogger;
+using KWH = DotNetSimulator.Units.KWH;
 
 namespace DotNetSimulator.Simulator.Elements;
 
@@ -15,7 +17,7 @@ internal class Battery : ISimulationElement
     private readonly KW _maximumOutput;
     private KWH _currentStepMaximumOutput;
     private KWH _currentStepOutput;
-    private KWH _currentChargeLevel;
+    public KWH CurrentChargeLevel { get; private set; }
     private readonly string _serial;
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
@@ -26,22 +28,27 @@ internal class Battery : ISimulationElement
     /// <param name="capacity"></param>
     /// <param name="maximumOutput"></param>
     /// <param name="maximumInput"></param>
-    public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput)
+    public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput) : this(serial, capacity, maximumOutput, maximumInput, KWH.Zero)
+    {
+    }
+
+    public Battery(string serial, KWH capacity, KW maximumOutput, KW maximumInput, KWH initialCharge)
     {
         _maximumOutput = maximumOutput;
         _maximumInput = maximumInput;
         _capacity = capacity;
-        _currentChargeLevel = KWH.Zero;
+        CurrentChargeLevel = KWH.Min(initialCharge, capacity);
         _currentStepMaximumOutput = KWH.Zero;
         _currentStepOutput = KWH.Zero;
         _serial = serial;
-        Logger.Info("{this}: Created Battery with capacity of {capacity} and maximum IO of {input} / {output}", this, capacity, maximumInput, maximumOutput);
+        Logger.Info("{this}: Created Battery with capacity of {initialCharge} / {capacity} and maximum IO of {input} / {output}", 
+            this, CurrentChargeLevel, _capacity, _maximumInput, _maximumOutput);
     }
 
     private KWH CalculateMaximumOutput(KWH maxAmount)
     {
         var remainingProvidablePower = _currentStepMaximumOutput - _currentStepOutput;
-        var providablePower = KWH.Min(remainingProvidablePower, _currentChargeLevel);
+        var providablePower = KWH.Min(remainingProvidablePower, CurrentChargeLevel);
         return KWH.Min(providablePower, maxAmount);
     }
 
@@ -49,7 +56,7 @@ internal class Battery : ISimulationElement
     public KWH GetProduction(KWH maxAmount)
     {
         var providablePower = CalculateMaximumOutput(maxAmount);
-        _currentChargeLevel -= providablePower;
+        CurrentChargeLevel -= providablePower;
         _currentStepOutput += providablePower;
         Logger.Debug("{this}: Providing {amount}", this, providablePower);
         return providablePower;
@@ -58,7 +65,7 @@ internal class Battery : ISimulationElement
     private KWH CalculateMaximumInput(TimeStep step)
     {
         var maximumStepInput = _maximumInput * step.Duration;
-        var remainingCapacity = _capacity - _currentChargeLevel;
+        var remainingCapacity = _capacity - CurrentChargeLevel;
         return KWH.Min(remainingCapacity, maximumStepInput);
     }
 
@@ -68,7 +75,7 @@ internal class Battery : ISimulationElement
         var maximumInput = CalculateMaximumInput(step);
         var totalInput = producers.Aggregate(KWH.Zero, (current, producer) => current + producer.GetProduction(maximumInput - current));
         Logger.Debug("{this}: Consuming {amount}", this, totalInput);
-        _currentChargeLevel += totalInput;
+        CurrentChargeLevel += totalInput;
         _currentStepMaximumOutput = _maximumOutput * step.Duration;
     }
 
