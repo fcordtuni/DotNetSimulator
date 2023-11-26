@@ -1,6 +1,8 @@
 ﻿//Author: FCORDT
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("TestDotNetSimulator")]
 namespace DotNetSimulator.Units;
 
 /// <summary>
@@ -11,7 +13,7 @@ public class KWH
     /// <summary>
     /// returns the numeric representation
     /// </summary>
-    private double Amount { get; }
+    internal double Amount { get; }
 
     /// <summary>
     /// 
@@ -69,5 +71,20 @@ public class KWH
     {
         var formatter = CultureInfo.CreateSpecificCulture("de-DE");
         return Amount.ToString(formatter) + " KWH";
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is KWH kwh && kwh.Equals(this); //do we even need a delta?
+    }
+
+    private bool Equals(KWH other)
+    {
+        return Amount.Equals(other.Amount);
+    }
+
+    public override int GetHashCode()
+    {
+        return Amount.GetHashCode();
     }
 }

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetSimulator", "DotNetSi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBusServer", "ModBusServer\ModBusServer.csproj", "{41353657-F71D-4E4C-A06E-C7868C89DC83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBusHistorian", "ModBusHistorian\ModBusHistorian.csproj", "{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModBusHistorian", "ModBusHistorian\ModBusHistorian.csproj", "{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDotNetSimulator", "TestDotNetSimulator\TestDotNetSimulator.csproj", "{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
