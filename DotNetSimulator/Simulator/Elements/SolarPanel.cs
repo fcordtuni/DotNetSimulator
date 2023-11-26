@@ -6,7 +6,7 @@ using ILogger = NLog.ILogger;
 namespace DotNetSimulator.Simulator.Elements;
 
 /// <summary>
-/// Simulates a Solar Pannel
+/// Simulates a Solar Panel
 /// </summary>
 internal class SolarPanel : ISimulationElement
 {
