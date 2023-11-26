@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//Author: FCORDT
 using DotNetSimulator.Simulator;
 using DotNetSimulator.Simulator.Elements;
 using DotNetSimulator.Units;

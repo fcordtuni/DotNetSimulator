@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//Author: FCORDT
 using DotNetSimulator.Units;
-using Xunit.Sdk;
 
 namespace TestDotNetSimulator;
 public class TestTimeStep
