@@ -1,6 +1,8 @@
 ﻿//Author: FCORDT
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("TestDotNetSimulator")]
 namespace DotNetSimulator.Units;
 
 /// <summary>
@@ -24,7 +26,7 @@ public readonly struct KW
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    private KWH ForTimeSpan(TimeSpan time) => new(this, time);
+    internal KWH ForTimeSpan(TimeSpan time) => new(this, time);
 
     public static KWH operator *(KW kw, TimeSpan time) => kw.ForTimeSpan(time);
 
@@ -36,5 +38,30 @@ public readonly struct KW
     {
         var formatter = CultureInfo.CreateSpecificCulture("de-DE");
         return Amount.ToString(formatter) + " KW";
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is KW kw && Equals(kw);
+    }
+
+    private bool Equals(KW other)
+    {
+        return Amount.Equals(other.Amount);
+    }
+
+    public override int GetHashCode()
+    {
+        return Amount.GetHashCode();
+    }
+
+    public static bool operator ==(KW left, KW right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(KW left, KW right)
+    {
+        return !(left == right);
     }
 }

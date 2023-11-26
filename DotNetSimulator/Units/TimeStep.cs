@@ -36,7 +36,7 @@ public readonly struct TimeStep
     public TimeStep(DateTime start, TimeSpan duration) { Start = start; End = start + duration; Duration = duration; }
 
     /// <summary>
-    /// returns the next timestep after this havin <paramref name="duration"/>
+    /// returns the next timestep after this having <paramref name="duration"/>
     /// </summary>
     /// <param name="duration"></param>
     /// <returns></returns>

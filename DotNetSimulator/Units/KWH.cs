@@ -75,7 +75,7 @@ public class KWH
 
     public override bool Equals(object? obj)
     {
-        return obj is KWH kwh && kwh.Equals(this); //do we even need a delta?
+        return obj is KWH kwh && Equals(kwh);
     }
 
     private bool Equals(KWH other)
@@ -86,5 +86,14 @@ public class KWH
     public override int GetHashCode()
     {
         return Amount.GetHashCode();
+    }
+    public static bool operator ==(KWH left, KWH right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(KWH left, KWH right)
+    {
+        return !(left == right);
     }
 }
