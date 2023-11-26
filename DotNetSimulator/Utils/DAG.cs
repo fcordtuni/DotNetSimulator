@@ -25,7 +25,7 @@ internal class DAG<T> where T : class
     /// adds a node to the graph
     /// </summary>
     /// <param name="node"></param>
-    public void AddNode(T node)
+    private void AddNode(T node)
     {
         _nodes.Add(node);
     }
@@ -53,13 +53,13 @@ internal class DAG<T> where T : class
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
-    public ISet<T> OutgoingNodes(T node)
+    private IEnumerable<T> OutgoingNodes(T node)
     {
         return _outgoingEdges.TryGetValue(node, out var outgoingNodes) ? outgoingNodes : new HashSet<T>();
     }
 
     /// <summary>
-    /// gets a list of nodes which this node has incomming edges from
+    /// gets a list of nodes which this node has incoming edges from
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>

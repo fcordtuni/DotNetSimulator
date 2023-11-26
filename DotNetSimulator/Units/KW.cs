@@ -24,7 +24,7 @@ public readonly struct KW
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public KWH ForTimeSpan(TimeSpan time) => new(this, time);
+    private KWH ForTimeSpan(TimeSpan time) => new(this, time);
 
     public static KWH operator *(KW kw, TimeSpan time) => kw.ForTimeSpan(time);
 

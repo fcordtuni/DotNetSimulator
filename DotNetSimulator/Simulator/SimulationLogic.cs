@@ -89,8 +89,7 @@ public class SimulationLogic
     /// <summary>
     /// adds a link between multiple <see cref="ISimulationElement"/> pairs
     /// </summary>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
+    /// <param name="links"></param>
     public void AddLinks(IEnumerable<(ISimulationElement, ISimulationElement)> links)
     {
         foreach (var link in links)

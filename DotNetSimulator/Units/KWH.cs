@@ -11,7 +11,7 @@ public class KWH
     /// <summary>
     /// returns the numeric representation
     /// </summary>
-    public double Amount { get; }
+    private double Amount { get; }
 
     /// <summary>
     /// 
