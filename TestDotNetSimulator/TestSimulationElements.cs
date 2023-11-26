@@ -11,8 +11,6 @@ namespace TestDotNetSimulator
     }
     internal class TimeInvariantSimulationElement(KWH maxProduction, KWH maxConsumption) : ISimulationTestElement
     {
-        private readonly KWH _maxProduction = maxProduction;
-        private readonly KWH _maxConsumption = maxConsumption;
         private KWH _produced = KWH.Zero;
         private KWH _consumed = KWH.Zero;
 
@@ -20,7 +18,7 @@ namespace TestDotNetSimulator
         {
             foreach (var producer in producers)
             {
-                var remaining = _maxConsumption - _consumed;
+                var remaining = maxConsumption - _consumed;
                 if (remaining.Amount > 0)
                 {
                     _consumed += producer.GetProduction(remaining);
@@ -30,7 +28,7 @@ namespace TestDotNetSimulator
 
         public KWH GetProduction(KWH maxAmount)
         {
-            var producing = KWH.Min(_maxProduction - _produced, maxAmount);
+            var producing = KWH.Min(maxProduction - _produced, maxAmount);
             _produced += producing;
             return producing;
         }

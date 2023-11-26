@@ -42,6 +42,7 @@ public class TestBattery
     {
         var infiniteConsumer = TestSimulationElements.InfiniteConsumer();
         var battery = new Battery("", KWH.Infinity, maxOutput, KW.Zero, KWH.Infinity);
+        battery.SimulateStep(timeStep, new List<ISimulationElement>());
         infiniteConsumer.SimulateStep(timeStep, new List<ISimulationElement> { battery });
         Assert.Equal(maxOutput * timeStep.Duration, infiniteConsumer.TotalIncoming());
     }
