@@ -5,11 +5,11 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetSimulator", "DotNetSimulator\DotNetSimulator.csproj", "{A3DDE4A7-6CD7-4272-95B2-7D7694F887E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBusServer", "ModBusServer\ModBusServer.csproj", "{41353657-F71D-4E4C-A06E-C7868C89DC83}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModBusHistorian", "ModBusHistorian\ModBusHistorian.csproj", "{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDotNetSimulator", "TestDotNetSimulator\TestDotNetSimulator.csproj", "{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestDotNetSimulator", "TestDotNetSimulator\TestDotNetSimulator.csproj", "{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusServer", "ModbusServer\ModbusServer.csproj", "{2021DDC9-E420-47EF-932A-A2C7F3B056CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{A3DDE4A7-6CD7-4272-95B2-7D7694F887E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3DDE4A7-6CD7-4272-95B2-7D7694F887E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3DDE4A7-6CD7-4272-95B2-7D7694F887E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41353657-F71D-4E4C-A06E-C7868C89DC83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41353657-F71D-4E4C-A06E-C7868C89DC83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41353657-F71D-4E4C-A06E-C7868C89DC83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41353657-F71D-4E4C-A06E-C7868C89DC83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74EDFD8A-511D-40DE-82C3-9EEBEF33DCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E00DEA-92F8-4205-A9F5-6F899BE8D2AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2021DDC9-E420-47EF-932A-A2C7F3B056CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2021DDC9-E420-47EF-932A-A2C7F3B056CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2021DDC9-E420-47EF-932A-A2C7F3B056CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2021DDC9-E420-47EF-932A-A2C7F3B056CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
