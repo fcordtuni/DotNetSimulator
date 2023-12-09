@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModbusServer;
+namespace ModbusServer.Binding;
 internal readonly struct ModbusInterfaceDescriptor
 {
     public ModbusInterfaceDescriptor(int offset, int length, string description)

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModbusServer;
-internal struct ModbusBinding
+namespace ModbusServer.Binding;
+internal struct ModbusBindingDescriptor
 {
-    public ModbusBinding(ICollection<ModbusInterfaceDescriptor> interfaces)
+    public ModbusBindingDescriptor(ICollection<ModbusInterfaceDescriptor> interfaces)
     {
         Interfaces = interfaces;
         Start = interfaces.Select(i => i.Offset).Min();
