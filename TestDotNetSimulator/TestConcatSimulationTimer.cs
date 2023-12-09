@@ -32,8 +32,8 @@ public class ConcatSimulationTimerTests
     [Fact]
     public async Task HasNextStep_WhenEitherTimerHasNextStep_ReturnsTrue()
     {
-        var firstTimer = new FakeSimulationTimer(true, new TimeStep());
-        var secondTimer = new FakeSimulationTimer(false, new TimeStep());
+        var firstTimer = new TestSimulationTimer(true, new TimeStep());
+        var secondTimer = new TestSimulationTimer(false, new TimeStep());
 
         var concatTimer = new ConcatSimulationTimer(firstTimer, secondTimer);
 
@@ -45,8 +45,8 @@ public class ConcatSimulationTimerTests
     [Fact]
     public async Task HasNextStep_WhenBothTimersNoNextStep_ReturnsFalse()
     {
-        var firstTimer = new FakeSimulationTimer(false, new TimeStep());
-        var secondTimer = new FakeSimulationTimer(false, new TimeStep());
+        var firstTimer = new TestSimulationTimer(false, new TimeStep());
+        var secondTimer = new TestSimulationTimer(false, new TimeStep());
 
         var concatTimer = new ConcatSimulationTimer(firstTimer, secondTimer);
 
@@ -59,8 +59,8 @@ public class ConcatSimulationTimerTests
     public async Task GetNextStep_WhenFirstTimerHasNextStep_ReturnsFirstTimerNextStep()
     {
         var expectedTimeStep = new TimeStep();
-        var firstTimer = new FakeSimulationTimer(true, expectedTimeStep);
-        var secondTimer = new FakeSimulationTimer(false, new TimeStep());
+        var firstTimer = new TestSimulationTimer(true, expectedTimeStep);
+        var secondTimer = new TestSimulationTimer(false, new TimeStep());
 
         var concatTimer = new ConcatSimulationTimer(firstTimer, secondTimer);
 
@@ -73,8 +73,8 @@ public class ConcatSimulationTimerTests
     public async Task GetNextStep_WhenFirstTimerHasNoNextStep_ReturnsSecondTimerNextStep()
     {
         var expectedTimeStep = new TimeStep();
-        var firstTimer = new FakeSimulationTimer(false, new TimeStep());
-        var secondTimer = new FakeSimulationTimer(true, expectedTimeStep);
+        var firstTimer = new TestSimulationTimer(false, new TimeStep());
+        var secondTimer = new TestSimulationTimer(true, expectedTimeStep);
 
         var concatTimer = new ConcatSimulationTimer(firstTimer, secondTimer);
 
