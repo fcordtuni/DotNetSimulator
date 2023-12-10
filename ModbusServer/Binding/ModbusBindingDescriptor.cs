@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ModbusServer.Binding;
-internal struct ModbusBindingDescriptor
+﻿namespace ModbusServer.Binding;
+internal readonly struct ModbusBindingDescriptor(ICollection<ModbusInterfaceDescriptor> interfaces, int offset)
 {
-    public ModbusBindingDescriptor(ICollection<ModbusInterfaceDescriptor> interfaces)
-    {
-        Interfaces = interfaces;
-        Start = interfaces.Select(i => i.Offset).Min();
-        End = interfaces.Select(i => i.Offset + i.Length).Max();
-    }
+    public int Start { get; } = interfaces.Select(i => i.Offset).DefaultIfEmpty().Min() + offset;
+    public int End { get; } = interfaces.Select(i => i.Offset + i.Length).DefaultIfEmpty().Max() + offset;
 
-    public int Start { get; }
-    public int End { get; }
-
-    public ICollection<ModbusInterfaceDescriptor> Interfaces { get; }
+    public ICollection<ModbusInterfaceDescriptor> Interfaces { get; } = interfaces;
 
 }

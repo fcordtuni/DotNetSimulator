@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ModbusServer.Binding;
-internal readonly struct ModbusInterfaceDescriptor
+﻿namespace ModbusServer.Binding;
+internal readonly struct ModbusInterfaceDescriptor(int offset, int length, string description)
 {
-    public ModbusInterfaceDescriptor(int offset, int length, string description)
-    {
-        Offset = offset;
-        Length = length;
-        Description = description;
-    }
-
-    public int Offset { get; }
-    public int Length { get; }
-    public string Description { get; }
+    public int Offset { get; } = offset;
+    public int Length { get; } = length;
+    public string Description { get; } = description;
 
 }
