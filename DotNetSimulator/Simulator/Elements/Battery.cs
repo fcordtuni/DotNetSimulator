@@ -1,7 +1,6 @@
 ﻿//Author: FCORDT
 using DotNetSimulator.Units;
 using NLog;
-using System.Runtime.CompilerServices;
 using ILogger = NLog.ILogger;
 using KWH = DotNetSimulator.Units.KWH;
 

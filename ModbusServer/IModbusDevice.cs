@@ -3,7 +3,7 @@
 using ModbusServer.Binding;
 
 namespace ModbusServer;
-internal interface IModbusDevice
+public interface IModbusDevice
 {
     void Register(IModbusMapper mapper);
 }

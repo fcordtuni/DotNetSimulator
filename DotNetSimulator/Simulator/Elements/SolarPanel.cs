@@ -1,5 +1,7 @@
 ﻿//Author: FCORDT
 using DotNetSimulator.Units;
+using ModbusServer;
+using ModbusServer.Binding;
 using NLog;
 using ILogger = NLog.ILogger;
 
@@ -8,7 +10,7 @@ namespace DotNetSimulator.Simulator.Elements;
 /// <summary>
 /// Simulates a Solar Panel
 /// </summary>
-internal class SolarPanel : ISimulationElement
+internal class SolarPanel : ISimulationElement, IModbusDevice
 {
     private readonly KW _maxProduction;
     private KWH _stepProduction;
@@ -67,5 +69,10 @@ internal class SolarPanel : ISimulationElement
     public override string ToString()
     {
         return "Solar Panel " + _serial;
+    }
+
+    public void Register(IModbusMapper mapper)
+    {
+        throw new NotImplementedException();
     }
 }

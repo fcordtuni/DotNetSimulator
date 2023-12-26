@@ -1,7 +1,7 @@
 ﻿//Author: FCORDT
 
 namespace ModbusServer.Binding;
-internal readonly struct ModbusInterfaceDescriptor(int offset, int length, string description)
+public readonly struct ModbusInterfaceDescriptor(int offset, int length, string description)
 {
     public int Offset { get; } = offset;
     public int Length { get; } = length;
