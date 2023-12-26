@@ -1,4 +1,6 @@
-﻿namespace ModbusServer.Binding;
+﻿//Author: FCORDT
+
+namespace ModbusServer.Binding;
 internal readonly struct ModbusBindingDescriptor(ICollection<ModbusInterfaceDescriptor> interfaces, int offset)
 {
     public int Start { get; } = interfaces.Select(i => i.Offset).DefaultIfEmpty().Min() + offset;

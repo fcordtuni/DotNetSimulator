@@ -1,4 +1,6 @@
-﻿using ModbusServer.Binding;
+﻿//Author: FCORDT
+
+using ModbusServer.Binding;
 
 namespace ModbusServer;
 internal interface IModbusDevice

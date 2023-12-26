@@ -1,4 +1,6 @@
-﻿namespace ModbusServer.Binding;
+﻿//Author: FCORDT
+
+namespace ModbusServer.Binding;
 internal interface IModbusMapper
 {
     void RegisterCoils(IModbusDevice caller, ICollection<ModbusInterfaceDescriptor> descriptors);

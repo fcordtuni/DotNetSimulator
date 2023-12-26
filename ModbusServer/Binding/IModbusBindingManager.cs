@@ -1,4 +1,6 @@
-﻿namespace ModbusServer.Binding;
+﻿//Author: FCORDT
+
+namespace ModbusServer.Binding;
 internal interface IModbusBindingManager<T>
 {
     void RegisterBinding(IModbusDevice device, ICollection<ModbusInterfaceDescriptor> interfaces);

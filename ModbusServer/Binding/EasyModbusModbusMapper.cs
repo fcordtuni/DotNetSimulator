@@ -1,4 +1,6 @@
-﻿namespace ModbusServer.Binding;
+﻿//Author: FCORDT
+
+namespace ModbusServer.Binding;
 internal class EasyModbusModbusMapper(EasyModbus.ModbusServer server) : IModbusMapper
 {
     private readonly IModbusBindingManager<bool> _coilsBindingManager = new EasyModbusModbusBindingManager<bool>(server.coils.localArray);
