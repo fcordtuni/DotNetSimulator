@@ -1,5 +1,7 @@
 ﻿//Author: FCORDT
 
+using ModbusDeviceLibrary.Modbus;
+
 namespace ModbusServer.Binding;
 internal interface IModbusBindingManager<T>
 {

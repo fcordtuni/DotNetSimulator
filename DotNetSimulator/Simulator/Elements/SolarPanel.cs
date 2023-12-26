@@ -1,9 +1,8 @@
 ﻿//Author: FCORDT
+
 using DotNetSimulator.Units;
-using ModbusServer;
-using ModbusServer.Binding;
+using ModbusDeviceLibrary.Modbus;
 using NLog;
-using ILogger = NLog.ILogger;
 
 namespace DotNetSimulator.Simulator.Elements;
 
@@ -15,7 +14,7 @@ internal class SolarPanel : ISimulationElement, IModbusDevice
     private readonly KW _maxProduction;
     private KWH _stepProduction;
     private readonly string _serial;
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     /// <summary>
     /// 

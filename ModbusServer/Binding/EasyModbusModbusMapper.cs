@@ -1,5 +1,7 @@
 ﻿//Author: FCORDT
 
+using ModbusDeviceLibrary.Modbus;
+
 namespace ModbusServer.Binding;
 internal class EasyModbusModbusMapper(EasyModbus.ModbusServer server) : IModbusMapper
 {

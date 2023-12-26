@@ -1,8 +1,6 @@
 ﻿//Author: FCORDT
 
-using ModbusDeviceLibrary.Modbus;
-
-namespace ModbusServer.Binding;
+namespace ModbusDeviceLibrary.Modbus;
 public interface IModbusMapper
 {
     void RegisterCoils(IModbusDevice caller, ICollection<ModbusInterfaceDescriptor> descriptors);

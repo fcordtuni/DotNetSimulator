@@ -1,8 +1,6 @@
 ﻿//Author: FCORDT
 
-using ModbusServer.Binding;
-
-namespace ModbusServer;
+namespace ModbusDeviceLibrary.Modbus;
 public interface IModbusDevice
 {
     void Register(IModbusMapper mapper);
