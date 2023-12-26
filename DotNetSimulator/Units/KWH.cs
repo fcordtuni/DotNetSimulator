@@ -8,18 +8,16 @@ namespace DotNetSimulator.Units;
 /// <summary>
 /// represents KWH units, i.e. <see cref="KW"/> multiplied by <see cref="TimeSpan"/>
 /// </summary>
-public class KWH
+/// <remarks>
+/// 
+/// </remarks>
+/// <param name="amount"></param>
+public class KWH(double amount)
 {
     /// <summary>
     /// returns the numeric representation
     /// </summary>
-    internal double Amount { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="amount"></param>
-    public KWH(double amount) { Amount = amount; }
+    internal double Amount { get; } = amount;
 
 
     /// <summary>
@@ -64,6 +62,11 @@ public class KWH
     public static KWH operator +(KWH left, KWH right)
     {
         return new KWH(left.Amount + right.Amount);
+    }
+
+    public static KW operator /(KWH left, TimeStep right)
+    {
+        return new KW(left, right);
     }
 
     /// <inheritdoc/>

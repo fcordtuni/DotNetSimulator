@@ -8,18 +8,26 @@ namespace DotNetSimulator.Units;
 /// <summary>
 /// A struct representing KW units
 /// </summary>
-public readonly struct KW
+/// <remarks>
+/// 
+/// </remarks>
+/// <param name="amount"></param>
+public readonly struct KW(double amount)
 {
     /// <summary>
     /// gets the numeric representation of the KW
     /// </summary>
-    public double Amount { get; }
+    public double Amount { get; } = amount;
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="amount"></param>
-    public KW(double amount) { Amount = amount; }
+    /// <param name="time"></param>
+    public KW(KWH amount, TimeStep time) : this(amount.Amount / time.Duration.TotalHours)
+    {
+
+    }
 
     /// <summary>
     /// returns the <see cref="KWH"/> that this unit would provide for the given <paramref name="time"/>
