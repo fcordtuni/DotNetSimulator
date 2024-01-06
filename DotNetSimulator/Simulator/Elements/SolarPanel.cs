@@ -9,7 +9,7 @@ namespace DotNetSimulator.Simulator.Elements;
 /// <summary>
 /// Simulates a Solar Panel
 /// </summary>
-internal class SolarPanel : ISimulationElement, IModbusDevice
+public class SolarPanel : ISimulationElement, IModbusDevice
 {
     private readonly KW _maxProduction;
     private KWH _stepProduction;

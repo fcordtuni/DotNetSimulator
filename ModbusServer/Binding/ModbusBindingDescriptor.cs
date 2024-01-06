@@ -1,5 +1,7 @@
 ﻿//Author: FCORDT
 
+using ModbusDeviceLibrary.Modbus;
+
 namespace ModbusServer.Binding;
 internal readonly struct ModbusBindingDescriptor(ICollection<ModbusInterfaceDescriptor> interfaces, int offset)
 {

@@ -5,9 +5,8 @@ using DotNetSimulator.Simulator.Time;
 using DotNetSimulator.Units;
 using NLog;
 using NLog.Web;
-using ILogger = NLog.ILogger;
 
-ILogger logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Info("starting setup");
 
 

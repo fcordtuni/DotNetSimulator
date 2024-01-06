@@ -4,14 +4,17 @@ using DotNetSimulator.Units;
 namespace TestDotNetSimulator;
 public class TestTimeStep
 {
-    public static IEnumerable<object[]> TimeStepData() =>
-        new List<object[]>
+    public static TheoryData<DateTime, DateTime, TimeSpan> TimeSpanData() =>
+        new()
         {
-            new object[] {new DateTime(2004, 1, 12, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20), TimeSpan.FromSeconds(20) },
-            new object[] {new DateTime(2004, 1, 11, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20), TimeSpan.FromSeconds(20).Add(TimeSpan.FromDays(1)) }
+            { new DateTime(2004, 1, 12, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20), TimeSpan.FromSeconds(20) },
+            {
+                new DateTime(2004, 1, 11, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20),
+                TimeSpan.FromSeconds(20).Add(TimeSpan.FromDays(1))
+            }
         };
 
-    [Theory, MemberData(nameof(TimeStepData))]
+    [Theory, MemberData(nameof(TimeSpanData))]
     public void TestTimeStepConstructor(DateTime start, DateTime end, TimeSpan duration)
     {
         var fromTo = new TimeStep(start, end);
@@ -24,7 +27,7 @@ public class TestTimeStep
         Assert.Equal(duration, fromDuration.Duration);
     }
 
-    [Theory, MemberData(nameof(TimeStepData))]
+    [Theory, MemberData(nameof(TimeSpanData))]
     public void TestTimeStepNext(DateTime start, DateTime end, TimeSpan duration)
     {
         var test = new TimeStep(start, end);

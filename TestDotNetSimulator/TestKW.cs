@@ -16,12 +16,12 @@ public class TestKW
         Assert.Equal(first.Equals(second), new KW(first).Equals(new KW(second)));
     }
 
-    public static IEnumerable<object[]> KwMultData() =>
-        new List<object[]>
+    public static TheoryData<KW, double, KW> KwMultData() => 
+        new()
         {
-            new object[] { new KW(1), 1, new KW(1) },
-            new object[] { new KW(1.123), 2.4, new KW(2.6952) },
-            new object[] { new KW(2.4), -1.32, new KW(-3.168) }
+            { new KW(1), 1, new KW(1) },
+            { new KW(1.123), 2.4, new KW(2.6952) },
+            { new KW(2.4), -1.32, new KW(-3.168) }
         };
 
     [Theory, MemberData(nameof(KwMultData))]

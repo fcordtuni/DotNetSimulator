@@ -9,7 +9,7 @@ namespace DotNetSimulator.Simulator.Elements;
 /// <summary>
 /// This class simulates a Battery
 /// </summary>
-internal class Battery : ISimulationElement, IModbusDevice
+public class Battery : ISimulationElement, IModbusDevice
 {
     private readonly KWH _capacity;
     private readonly KW _maximumInput;

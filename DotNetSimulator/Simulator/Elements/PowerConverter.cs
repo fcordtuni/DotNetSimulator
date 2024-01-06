@@ -8,7 +8,7 @@ namespace DotNetSimulator.Simulator.Elements;
 /// <summary>
 /// This Class simulates a Power Converter
 /// </summary>
-internal class PowerConverter : ISimulationElement, IModbusDevice
+public class PowerConverter : ISimulationElement, IModbusDevice
 {
     private KWH _stepProduction;
     private KWH _stepProvision;
