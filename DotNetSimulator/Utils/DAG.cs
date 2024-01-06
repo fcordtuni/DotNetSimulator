@@ -42,9 +42,9 @@ internal class DAG<T> where T : class
         AddNode(toNode);
 
         //is there a way to add it more easily, like javas compute if absent?
-        if (!_outgoingEdges.ContainsKey(fromNode)) _outgoingEdges.Add(fromNode, new HashSet<T>());
+        if (!_outgoingEdges.ContainsKey(fromNode)) _outgoingEdges.Add(fromNode, []);
         _outgoingEdges[fromNode].Add(toNode);
-        if (!_incomingEdges.ContainsKey(toNode)) _incomingEdges.Add(toNode, new HashSet<T>());
+        if (!_incomingEdges.ContainsKey(toNode)) _incomingEdges.Add(toNode, []);
         _incomingEdges[toNode].Add(fromNode);
     }
 
@@ -55,7 +55,7 @@ internal class DAG<T> where T : class
     /// <returns></returns>
     private IEnumerable<T> OutgoingNodes(T node)
     {
-        return _outgoingEdges.TryGetValue(node, out var outgoingNodes) ? outgoingNodes : new HashSet<T>();
+        return _outgoingEdges.TryGetValue(node, out var outgoingNodes) ? outgoingNodes : [];
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ internal class DAG<T> where T : class
     /// <returns></returns>
     public ISet<T> IncomingNodes(T node)
     {
-        return _incomingEdges.TryGetValue(node, out var incomingNodes) ? incomingNodes : new HashSet<T>();
+        return _incomingEdges.TryGetValue(node, out var incomingNodes) ? incomingNodes : [];
     }
 
     /// <summary>
@@ -74,8 +74,8 @@ internal class DAG<T> where T : class
     /// <returns>the topological sorted graph as list of nodes</returns>
     public List<T> TopologicalSort()
     {
-        List<T> sortedNodes = new();
-        Dictionary<T, int> incomingEdgeCount = new();
+        List<T> sortedNodes = [];
+        Dictionary<T, int> incomingEdgeCount = [];
         Queue<T> freeNodes = new();
 
         //setup: create data structures

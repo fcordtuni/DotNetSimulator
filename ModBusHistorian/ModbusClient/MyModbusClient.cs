@@ -1,11 +1,12 @@
-﻿using NLog;
-using ILogger = NLog.ILogger;
+﻿//Author: FCORDT
+
+using NLog;
 
 namespace ModBusHistorian.ModbusClient
 {
     public class MyModbusClient : IMyModbusClient
     {
-        private static ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static Logger Logger = LogManager.GetCurrentClassLogger();
         public int PollingTimeMs { get; set; }
         public int ReconnectTimeMs { get; set; }
         public bool IsAutoReconnectEnabled { get; set; }

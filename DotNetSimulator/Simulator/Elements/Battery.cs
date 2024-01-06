@@ -1,7 +1,7 @@
 ﻿//Author: FCORDT
 using DotNetSimulator.Units;
+using ModbusDeviceLibrary.Modbus;
 using NLog;
-using ILogger = NLog.ILogger;
 using KWH = DotNetSimulator.Units.KWH;
 
 namespace DotNetSimulator.Simulator.Elements;
@@ -9,16 +9,31 @@ namespace DotNetSimulator.Simulator.Elements;
 /// <summary>
 /// This class simulates a Battery
 /// </summary>
-internal class Battery : ISimulationElement
+internal class Battery : ISimulationElement, IModbusDevice
 {
     private readonly KWH _capacity;
     private readonly KW _maximumInput;
     private readonly KW _maximumOutput;
     private KWH _currentStepMaximumOutput;
     private KWH _currentStepOutput;
-    public KWH CurrentChargeLevel { get; private set; }
+    private KWH _currentChargeLevel;
+
+    public KWH CurrentChargeLevel
+    {
+        get => _currentChargeLevel;
+        private set
+        {
+            _currentChargeLevel = value;
+            if (_mapper != null)
+            {
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[(16 + 1 * sizeof(int))..], (int)(value.Amount * 1000 * 3600));
+            }
+        }
+    }
+
     private readonly string _serial;
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private IModbusMapper? _mapper;
 
     /// <summary>
     /// 
@@ -36,7 +51,7 @@ internal class Battery : ISimulationElement
         _maximumOutput = maximumOutput;
         _maximumInput = maximumInput;
         _capacity = capacity;
-        CurrentChargeLevel = KWH.Min(initialCharge, capacity);
+        _currentChargeLevel = KWH.Min(initialCharge, capacity);
         _currentStepMaximumOutput = KWH.Zero;
         _currentStepOutput = KWH.Zero;
         _serial = serial;
@@ -82,5 +97,26 @@ internal class Battery : ISimulationElement
     public override string ToString()
     {
         return "Battery " + _serial;
+    }
+
+    /// <inheritdoc />
+    public void Register(IModbusMapper mapper)
+    {
+        _mapper = mapper;
+        _mapper.RegisterHoldingRegisters(this,
+            new List<ModbusInterfaceDescriptor>
+            {
+                new(0, 16, "Serial Number"),
+                new(16 + 0 * sizeof(int), sizeof(int), "Max Capacity in watt-seconds"),
+                new(16 + 1 * sizeof(int), sizeof(int), "Current Capacity in watt-seconds"),
+                new(16 + 2 * sizeof(int), sizeof(int), "Maximum Input in Watt"),
+                new(16 + 3 * sizeof(int), sizeof(int), "Maximum Output in Watt"),
+            });
+
+        var holdingRegisters = _mapper.GetHoldingRegisters(this);
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[..16], _serial);
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..], (int)(_capacity.Amount * 1000 * 3600));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[(16 + 2 * sizeof(int))..], (int)(_maximumInput.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[(16 + 3 * sizeof(int))..], (int)(_maximumOutput.Amount * 1000));
     }
 }

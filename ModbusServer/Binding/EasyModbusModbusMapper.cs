@@ -5,10 +5,10 @@ using ModbusDeviceLibrary.Modbus;
 namespace ModbusServer.Binding;
 internal class EasyModbusModbusMapper(EasyModbus.ModbusServer server) : IModbusMapper
 {
-    private readonly IModbusBindingManager<bool> _coilsBindingManager = new EasyModbusModbusBindingManager<bool>(server.coils.localArray);
-    private readonly IModbusBindingManager<bool> _discreteInputBindingManager = new EasyModbusModbusBindingManager<bool>(server.discreteInputs.localArray);
-    private readonly IModbusBindingManager<short> _inputRegisterBindingManager = new EasyModbusModbusBindingManager<short>(server.inputRegisters.localArray);
-    private readonly IModbusBindingManager<short> _holdingRegisterBindingManager = new EasyModbusModbusBindingManager<short>(server.holdingRegisters.localArray);
+    private readonly EasyModbusModbusBindingManager<bool> _coilsBindingManager = new(server.coils.localArray);
+    private readonly EasyModbusModbusBindingManager<bool> _discreteInputBindingManager = new(server.discreteInputs.localArray);
+    private readonly EasyModbusModbusBindingManager<short> _inputRegisterBindingManager = new(server.inputRegisters.localArray);
+    private readonly EasyModbusModbusBindingManager<short> _holdingRegisterBindingManager = new(server.holdingRegisters.localArray);
 
 
     public void RegisterCoils(IModbusDevice caller, ICollection<ModbusInterfaceDescriptor> descriptors)
