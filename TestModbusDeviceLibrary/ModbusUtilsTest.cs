@@ -20,7 +20,7 @@ namespace TestModbusDeviceLibrary
             Assert.Equal(value, result);
         }
 
-        [Theory, InlineData("Hello World", 150, "Hello World"), InlineData("Hello World", 3, "Hel")]
+        [Theory, InlineData("Hello World", 150, "Hello World"), InlineData("Hello World", 6, "Hel")]
         public void WriteHoldingRegister_StringValue_Success(string value, int spanLength, string expectedValue)
         {
             // Arrange

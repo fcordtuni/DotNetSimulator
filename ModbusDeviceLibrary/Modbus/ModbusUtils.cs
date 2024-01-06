@@ -66,9 +66,14 @@ namespace ModbusDeviceLibrary.Modbus
                 bytes[i] = (byte)holdingRegister[i];
             }
 
-            for (var i = 0; i < bytes.Length; i += sizeof(char))
+            for (var i = 0; (i + sizeof(char)) <= bytes.Length; i += sizeof(char))
             {
-                rVal.Append(BitConverter.ToChar(bytes.AsSpan()[i..]));
+                var c = BitConverter.ToChar(bytes.AsSpan()[i..]);
+                if (c == 0)
+                {
+                    break;
+                }
+                rVal.Append(c);
             }
             return rVal.ToString();
         }
