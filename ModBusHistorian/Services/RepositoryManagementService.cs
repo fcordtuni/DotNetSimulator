@@ -9,7 +9,7 @@ namespace ModBusHistorian.Services;
 /// <summary>
 /// This is a hosted service that initializes the repository service and adds a data series recorder to it.
 /// </summary>
-internal class RepositoryManagementService : IHostedService
+internal class RepositoryManagementService : IHostedService, IDisposable
 {
     private readonly IMyModbusClient _myModbusClient;
     private readonly IDataSeriesRepository _repositoryService;
@@ -32,7 +32,7 @@ internal class RepositoryManagementService : IHostedService
         {
             Logger.Info("Startup: Connecting to MODBUS server and configuring it.");
 
-            _myModbusClient.Connect();
+            _myModbusClient.Connect(cancellationToken);
             _myModbusClient.AddReadInputRegisterPolling(new AddressRange(10, 10));
 
             Logger.Info("Startup: Initializing data series recorder.");
@@ -82,5 +82,10 @@ internal class RepositoryManagementService : IHostedService
         }
 
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _repositoryService.Dispose();
     }
 }

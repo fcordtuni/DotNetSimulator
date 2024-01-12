@@ -26,9 +26,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProduction = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(
-                    _mapper.GetHoldingRegisters(this)[(16 + 0 * sizeof(int))..], 
-                (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[16..18], (int)((value / _currentTimeStep).Amount * 1000));
             }
         }
     }
@@ -41,9 +39,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProvision = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(
-                    _mapper.GetHoldingRegisters(this)[(16 + 1 * sizeof(int))..],
-                    (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)((value / _currentTimeStep).Amount * 1000));
             }
         }
     }
@@ -108,13 +104,13 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 16, "Serial Number"),
-                new(16 + 0 * sizeof(int), sizeof(int), "Current Maximum Output in Watt"),
-                new(16 + 1 * sizeof(int), sizeof(int), "Current Output in Watt"),
+                new(16, 2, "Current Maximum Output in Watt"),
+                new(18, 2, "Current Output in Watt"),
             });
         _mapper.RegisterDiscreteInputs(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 1, "Device Disabled")
+                new(0, 1, "Device Enabled")
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

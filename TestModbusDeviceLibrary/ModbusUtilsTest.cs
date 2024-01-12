@@ -20,7 +20,7 @@ namespace TestModbusDeviceLibrary
             Assert.Equal(value, result);
         }
 
-        [Theory, InlineData("Hello World", 150, "Hello World"), InlineData("Hello World", 6, "Hel")]
+        [Theory, InlineData("Hello World", 150, "Hello World"), InlineData("Hello World", 3, "Hello")]
         public void WriteHoldingRegister_StringValue_Success(string value, int spanLength, string expectedValue)
         {
             // Arrange
@@ -31,7 +31,7 @@ namespace TestModbusDeviceLibrary
 
             // Assert
             var result = ModbusUtils.ReadHoldingRegisterStr(holdingRegister);
-            Assert.Equal(expectedValue, result);
+            Assert.Equal(expectedValue, result.TrimEnd());
         }
     }
 }

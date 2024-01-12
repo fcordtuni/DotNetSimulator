@@ -33,12 +33,12 @@ public interface IMyModbusClient
     /// <summary>
     /// Connects to the modbus server
     /// </summary>
-    void Connect();
+    Task Connect(CancellationToken cancellationToken);
     
     /// <summary>
     /// Disconnects from the modbus server
     /// </summary>
-    void Disconnect();
+    Task Disconnect();
 
     /// <summary>
     /// Defines an address range that gets polled as MODBUS InputRegister 

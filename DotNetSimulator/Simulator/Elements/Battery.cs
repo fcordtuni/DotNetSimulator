@@ -26,7 +26,7 @@ public class Battery : ISimulationElement, IModbusDevice
             _currentChargeLevel = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[(16 + 1 * sizeof(int))..], (int)(value.Amount * 1000 * 3600));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)(value.Amount * 1000 * 3600));
             }
         }
     }
@@ -107,16 +107,16 @@ public class Battery : ISimulationElement, IModbusDevice
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 16, "Serial Number"),
-                new(16 + 0 * sizeof(int), sizeof(int), "Max Capacity in watt-seconds"),
-                new(16 + 1 * sizeof(int), sizeof(int), "Current Capacity in watt-seconds"),
-                new(16 + 2 * sizeof(int), sizeof(int), "Maximum Input in Watt"),
-                new(16 + 3 * sizeof(int), sizeof(int), "Maximum Output in Watt"),
+                new(16, 2, "Max Capacity in watt-seconds"),
+                new(18, 2, "Current Capacity in watt-seconds"),
+                new(20, 2, "Maximum Input in Watt"),
+                new(22, 2, "Maximum Output in Watt"),
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);
         ModbusUtils.WriteHoldingRegister(holdingRegisters[..16], _serial);
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..], (int)(_capacity.Amount * 1000 * 3600));
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[(16 + 2 * sizeof(int))..], (int)(_maximumInput.Amount * 1000));
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[(16 + 3 * sizeof(int))..], (int)(_maximumOutput.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..18], (int)(_capacity.Amount * 1000 * 3600));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[20..22], (int)(_maximumInput.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[22..24], (int)(_maximumOutput.Amount * 1000));
     }
 }

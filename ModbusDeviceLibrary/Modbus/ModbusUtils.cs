@@ -1,6 +1,7 @@
 ﻿//Author: FCORDT
 
 using System.Text;
+using EasyModbus;
 
 namespace ModbusDeviceLibrary.Modbus
 {
@@ -16,39 +17,29 @@ namespace ModbusDeviceLibrary.Modbus
         /// <param name="value"></param>
         public static void WriteHoldingRegister(Span<short> holdingRegister, int value)
         {
-            var bytes = BitConverter.GetBytes(value);
+            var convertedValue = ModbusClient.ConvertIntToRegisters(value);
 
-            for (var i = 0; i < bytes.Length; i++)
+
+            for (var i = 0; i < convertedValue.Length; i++)
             {
-                holdingRegister[i] = bytes[i];
+                holdingRegister[i] = (short)convertedValue[i];
             }
         }
 
         /// <summary>
         /// Writes the given string to the holding register. Takes sizeof(char) * value.Length number of array elements.
-        /// If the given span is too short, the string will be shortened, else the remaining space will be filled with zeroes
+        /// If the given span is too short, the string will be shortened, else the remaining space will be filled with spaces
         /// </summary>
         /// <param name="holdingRegister">a Span pointing to the position of the holding register the int should be written to</param>
         /// <param name="value"></param>
         public static void WriteHoldingRegister(Span<short> holdingRegister, string value)
         {
-            var strPos = 0;
-            var hrPos = 0;
-
-            //each character has sizeof(char) bytes, write sizeof(char) bytes to the holding register with each iteration
-            while ((hrPos + sizeof(char)) <= holdingRegister.Length && strPos < value.Length)
+            var strLen = holdingRegister.Length * 2;
+            value = value.PadRight(strLen)[..strLen];
+            var strRegisters = ModbusClient.ConvertStringToRegisters(value);
+            for (var i = 0; i < strRegisters.Length; i++)
             {
-                var strBytes = BitConverter.GetBytes(value[strPos++]);
-                foreach (var b in strBytes)
-                {
-                    holdingRegister[hrPos++] = b;
-                }
-            }
-
-            //set remaining bytes to zero
-            for (var i = hrPos; i < holdingRegister.Length; i++)
-            {
-                holdingRegister[i] = 0;
+                holdingRegister[i] = (short)strRegisters[i];
             }
         }
 
@@ -59,23 +50,14 @@ namespace ModbusDeviceLibrary.Modbus
         /// <returns></returns>
         public static string ReadHoldingRegisterStr(Span<short> holdingRegister)
         {
-            var rVal = new StringBuilder(holdingRegister.Length / sizeof(char));
-            var bytes = new byte[holdingRegister.Length];
-            for (var i = 0; i < bytes.Length; ++i)
+            var strLen = holdingRegister.Length * 2;
+            var strData = new int[holdingRegister.Length];
+            for (var i = 0; i < strData.Length; i++)
             {
-                bytes[i] = (byte)holdingRegister[i];
+                strData[i] = holdingRegister[i];
             }
 
-            for (var i = 0; (i + sizeof(char)) <= bytes.Length; i += sizeof(char))
-            {
-                var c = BitConverter.ToChar(bytes.AsSpan()[i..]);
-                if (c == 0)
-                {
-                    break;
-                }
-                rVal.Append(c);
-            }
-            return rVal.ToString();
+            return ModbusClient.ConvertRegistersToString(strData, 0, strLen);
         }
 
         /// <summary>
@@ -85,12 +67,8 @@ namespace ModbusDeviceLibrary.Modbus
         /// <returns></returns>
         public static int ReadHoldingRegisterInt(Span<short> holdingRegister)
         {
-            var bytes = new byte[holdingRegister.Length];
-            for (var i = 0; i < holdingRegister.Length; i++)
-            {
-                bytes[i] = (byte)holdingRegister[i];
-            }
-            return BitConverter.ToInt32(bytes, 0);
+            var registers = new int[]{ holdingRegister[0], holdingRegister[1] };
+            return ModbusClient.ConvertRegistersToInt(registers);
         }
     }
 }
