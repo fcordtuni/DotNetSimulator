@@ -8,8 +8,8 @@ using ModbusServer.Binding;
 
 //setting up the Simulator
 SimulationLogic logic =
-    new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now, TimeSpan.FromSeconds(10))
-        .AndThen(ISimulationTimer.RealTime(0.1, TimeSpan.FromSeconds(1), DateTime.Now)));
+    new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now.AddHours(-5), TimeSpan.FromSeconds(10))
+        .AndThen(ISimulationTimer.RealTime(1, TimeSpan.FromSeconds(1), DateTime.Now.AddHours(-5))));
 var sp1 = new SolarPanel("SP1", new KW(0.2));
 var sp2 = new SolarPanel("SP2", new KW(0.3));
 var sp3 = new SolarPanel("SP3", new KW(0.17));

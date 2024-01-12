@@ -69,7 +69,8 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         _stepProduction = (GetTotalProductionForTimeOfDay(step.End.TimeOfDay) - GetTotalProductionForTimeOfDay(step.Start.TimeOfDay)) * _maxProduction * step.Duration;
         if (_mapper != null)
         {
-            ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)(_stepProduction / step).Amount * 1000);
+            ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)((_stepProduction / step).Amount * 1000));
+            Console.WriteLine("Writing to register " + (int)((_stepProduction / step).Amount * 1000)); //todo: BUG, need to reevaluate the calculation
         }
         Logger.Debug("{this}: Producing {amount}", this, _stepProduction);
     }
