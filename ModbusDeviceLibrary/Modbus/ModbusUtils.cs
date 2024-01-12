@@ -1,6 +1,5 @@
 ﻿//Author: FCORDT
 
-using System.Text;
 using EasyModbus;
 
 namespace ModbusDeviceLibrary.Modbus

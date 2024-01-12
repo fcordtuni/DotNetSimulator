@@ -7,17 +7,8 @@ namespace TestDotNetSimulator;
 
 public class ConcatSimulationTimerTests
 {
-    public class TestSimulationTimer : ISimulationTimer
+    private class TestSimulationTimer(bool hasNextStep, TimeStep timeStep) : ISimulationTimer
     {
-        private bool hasNextStep;
-        private TimeStep timeStep;
-
-        public TestSimulationTimer(bool hasNextStep, TimeStep timeStep)
-        {
-            this.hasNextStep = hasNextStep;
-            this.timeStep = timeStep;
-        }
-
         public bool HasNextStep()
         {
             return hasNextStep;
@@ -30,7 +21,7 @@ public class ConcatSimulationTimerTests
     }
 
     [Fact]
-    public async Task HasNextStep_WhenEitherTimerHasNextStep_ReturnsTrue()
+    public void HasNextStep_WhenEitherTimerHasNextStep_ReturnsTrue()
     {
         var firstTimer = new TestSimulationTimer(true, new TimeStep());
         var secondTimer = new TestSimulationTimer(false, new TimeStep());
@@ -43,7 +34,7 @@ public class ConcatSimulationTimerTests
     }
 
     [Fact]
-    public async Task HasNextStep_WhenBothTimersNoNextStep_ReturnsFalse()
+    public void HasNextStep_WhenBothTimersNoNextStep_ReturnsFalse()
     {
         var firstTimer = new TestSimulationTimer(false, new TimeStep());
         var secondTimer = new TestSimulationTimer(false, new TimeStep());
