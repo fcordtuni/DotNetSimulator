@@ -1,7 +1,7 @@
 ﻿//Author: Elisabeth Gisser
 
-using DotNetSimulator.Time;
-using System.Threading.Tasks;
+using DotNetSimulator.Simulator.Time;
+using DotNetSimulator.Units;
 
 namespace TestDotNetSimulator;
 public class TestRealTimeSimulationTimer
@@ -45,7 +45,7 @@ public class TestRealTimeSimulationTimer
             var testNextStep = await testTimer.GetNextStep();
             var realTimeNextStep = await realTimeTimer.GetNextStep();
 
-            var timeDifference = Math.Abs((realTimeNextStep.Timestamp - testNextStep.Timestamp).TotalSeconds);
+            var timeDifference = Math.Abs((realTimeNextStep.Start - testNextStep.Start).TotalSeconds);
             Assert.True(timeDifference <= 1, "Time difference should be within 1 second tolerance.");
         }
     }
@@ -65,9 +65,9 @@ public class TestRealTimeSimulationTimer
         {
             var realTimeNextStep = await realTimeTimer.GetNextStep();
 
-            Assert.True(realTimeNextStep.Timestamp > previousTimestamp,
+            Assert.True(realTimeNextStep.Start > previousTimestamp,
                 "Timestamp of next step should be greater than the previous step.");
-            previousTimestamp = realTimeNextStep.Timestamp;
+            previousTimestamp = realTimeNextStep.Start;
         }
     }
 
@@ -86,7 +86,7 @@ public class TestRealTimeSimulationTimer
         {
             var realTimeNextStep = await realTimeTimer.GetNextStep();
 
-            var timeDifference = (DateTime.Now - realTimeNextStep.Timestamp).TotalSeconds;
+            var timeDifference = (DateTime.Now - realTimeNextStep.Start).TotalSeconds;
             Assert.True(timeDifference < 0.5,
                 "Time difference between current time and timestamp should be less than 0.5 seconds.");
         }

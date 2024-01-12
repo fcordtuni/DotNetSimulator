@@ -1,7 +1,7 @@
 ﻿//Author: Elisabeth Gisser
 
-using DotNetSimulator.Time;
-using System.Threading.Tasks;
+using DotNetSimulator.Simulator.Time;
+using DotNetSimulator.Units;
 
 namespace TestDotNetSimulator;
 
