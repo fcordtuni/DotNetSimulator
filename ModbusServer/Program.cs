@@ -5,11 +5,16 @@ using DotNetSimulator.Simulator;
 using DotNetSimulator.Simulator.Elements;
 using DotNetSimulator.Units;
 using ModbusServer.Binding;
+using NLog;
+using NLog.Web;
+
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Info("starting setup");
 
 //setting up the Simulator
 SimulationLogic logic =
-    new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now.AddHours(-5), TimeSpan.FromSeconds(10))
-        .AndThen(ISimulationTimer.RealTime(1, TimeSpan.FromSeconds(1), DateTime.Now.AddHours(-5))));
+    new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now, TimeSpan.FromSeconds(10))
+        .AndThen(ISimulationTimer.RealTime(1, TimeSpan.FromSeconds(1), DateTime.Now)));
 var sp1 = new SolarPanel("SP1", new KW(0.2));
 var sp2 = new SolarPanel("SP2", new KW(0.3));
 var sp3 = new SolarPanel("SP3", new KW(0.17));

@@ -31,6 +31,7 @@ public class KWH(double amount)
 
     public static readonly KWH Infinity = new(double.PositiveInfinity);
     public static readonly KWH Zero = new(0);
+    public static readonly KWH One = new(1);
 
     /// <summary>
     /// returns the maximum of the given values
@@ -67,6 +68,16 @@ public class KWH(double amount)
     public static KW operator /(KWH left, TimeStep right)
     {
         return new KW(left, right);
+    }
+
+    public static KWH operator *(KWH left, double right)
+    {
+        return new KWH(left.Amount * right);
+    }
+
+    public static KWH operator *(double left, KWH right)
+    {
+        return right * left;
     }
 
     /// <inheritdoc/>

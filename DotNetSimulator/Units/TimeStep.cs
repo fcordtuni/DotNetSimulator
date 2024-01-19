@@ -21,6 +21,22 @@ public readonly struct TimeStep
     /// </summary>
     public TimeSpan Duration { get; }
 
+    public static TimeStep Clamp(TimeStep duration, TimeSpan min, TimeSpan max)
+    {
+        var minTime = duration.Start.TimeOfDay;
+        if (min > minTime)
+        {
+            minTime = min;
+        }
+        var maxTime = duration.End.TimeOfDay;
+        if (max < maxTime)
+        {
+            maxTime = max;
+        }
+
+        return new TimeStep(duration.Start.Date + minTime, duration.End.Date + maxTime);
+    }
+
     /// <summary>
     /// 
     /// </summary>
