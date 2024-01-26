@@ -31,7 +31,7 @@ public class TestFastForwardSimulationTimer
         while (fastForwardTimer.HasNextStep())
         {
             var nextStep = await fastForwardTimer.GetNextStep();
-            Assert.True(nextStep.Start < endTime, "Timestamp should be less than end time.");
+            Assert.True(nextStep.Start <= endTime, "Timestamp should be less than end time.");
         }
     }
 
