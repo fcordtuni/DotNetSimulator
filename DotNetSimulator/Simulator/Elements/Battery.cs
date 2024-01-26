@@ -110,7 +110,7 @@ public class Battery : ISimulationElement, IModbusDevice
                 new(16, 2, "Max Capacity in watt-seconds"),
                 new(18, 2, "Current Capacity in watt-seconds"),
                 new(20, 2, "Maximum Input in Watt"),
-                new(22, 2, "Maximum Output in Watt"),
+                new(22, 2, "Maximum Output in Watt")
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

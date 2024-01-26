@@ -105,7 +105,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             {
                 new(0, 16, "Serial Number"),
                 new(16, 2, "Current Maximum Output in Watt"),
-                new(18, 2, "Current Output in Watt"),
+                new(18, 2, "Current Output in Watt")
             });
         _mapper.RegisterDiscreteInputs(this,
             new List<ModbusInterfaceDescriptor>

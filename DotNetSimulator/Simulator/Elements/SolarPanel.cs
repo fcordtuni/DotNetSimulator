@@ -58,7 +58,8 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         {
             return KWH.Zero;
         }
-        else if (step.Start.TimeOfDay > maxTime)
+
+        if (step.Start.TimeOfDay > maxTime)
         {
             return KWH.One * maxProduction.Amount;
         }
@@ -66,7 +67,7 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         step = TimeStep.Clamp(step, minTime, maxTime);
         var productionPercentage = (-Math.Cos(step.Start.TimeOfDay.TotalHours * twoPi) -
                                     Math.Cos(step.End.TimeOfDay.TotalHours * twoPi)) / 2;
-        return (productionPercentage * maxProduction) * step.Duration;
+        return productionPercentage * maxProduction * step.Duration;
     }
 
     /// <inheritdoc />

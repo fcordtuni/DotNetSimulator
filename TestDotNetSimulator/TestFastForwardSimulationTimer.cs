@@ -8,9 +8,9 @@ public class TestFastForwardSimulationTimer
     [Fact]
     public void HasNextStep_WhenEndTimeNotReached_ReturnsTrue()
     {
-        DateTime startTime = new DateTime(2023, 1, 1);
-        DateTime endTime = new DateTime(2023, 1, 10);
-        TimeSpan timeSpan = TimeSpan.FromDays(1);
+        var startTime = new DateTime(2023, 1, 1);
+        var endTime = new DateTime(2023, 1, 10);
+        var timeSpan = TimeSpan.FromDays(1);
 
         var fastForwardTimer = new FastForwardSimulationTimer(startTime, endTime, timeSpan);
 
@@ -22,9 +22,9 @@ public class TestFastForwardSimulationTimer
     [Fact]
     public async Task GetNextStep_ReturnsTimeStepsUntilEndTime()
     {
-        DateTime startTime = new DateTime(2023, 1, 1);
-        DateTime endTime = new DateTime(2023, 1, 5);
-        TimeSpan timeSpan = TimeSpan.FromDays(1);
+        var startTime = new DateTime(2023, 1, 1);
+        var endTime = new DateTime(2023, 1, 5);
+        var timeSpan = TimeSpan.FromDays(1);
 
         var fastForwardTimer = new FastForwardSimulationTimer(startTime, endTime, timeSpan);
 
@@ -38,9 +38,9 @@ public class TestFastForwardSimulationTimer
     [Fact]
     public void HasNextStep_WhenEndTimeReached_ReturnsFalse()
     {
-        DateTime startTime = new DateTime(2023, 1, 1);
-        DateTime endTime = new DateTime(2023, 1, 3);
-        TimeSpan timeSpan = TimeSpan.FromDays(1);
+        var startTime = new DateTime(2023, 1, 1);
+        var endTime = new DateTime(2023, 1, 3);
+        var timeSpan = TimeSpan.FromDays(1);
 
         var fastForwardTimer = new FastForwardSimulationTimer(startTime, endTime, timeSpan);
 

@@ -24,14 +24,14 @@ public class TestRealTimeSimulationTimer
     [Fact]
     public async Task GetNextStep_ReturnsExpectedTimeStep()
     {
-        DateTime startTime = DateTime.Now;
-        TimeSpan timeSpan = TimeSpan.FromSeconds(5);
-        double timeFactor = 2.0;
+        var startTime = DateTime.Now;
+        var timeSpan = TimeSpan.FromSeconds(5);
+        const double timeFactor = 2.0;
 
         var testTimer = new TestSimulationTimer(startTime, timeSpan);
         var realTimeTimer = new RealTimeSimulationTimer(timeFactor, timeSpan, startTime);
 
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             var testNextStep = await testTimer.GetNextStep();
             var realTimeNextStep = await realTimeTimer.GetNextStep();
@@ -44,15 +44,15 @@ public class TestRealTimeSimulationTimer
     [Fact]
     public async Task GetNextStep_ReturnsStepsWithIncreasedTimestamp()
     {
-        DateTime startTime = DateTime.Now;
-        TimeSpan timeSpan = TimeSpan.FromSeconds(3);
-        double timeFactor = 1.0;
+        var startTime = DateTime.Now;
+        var timeSpan = TimeSpan.FromSeconds(3);
+        const double timeFactor = 1.0;
 
         var realTimeTimer = new RealTimeSimulationTimer(timeFactor, timeSpan, startTime);
 
-        DateTime previousTimestamp = DateTime.MinValue;
+        var previousTimestamp = DateTime.MinValue;
 
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             var realTimeNextStep = await realTimeTimer.GetNextStep();
 
@@ -65,15 +65,13 @@ public class TestRealTimeSimulationTimer
     [Fact]
     public async Task GetNextStep_ReturnsStepsInRealTime()
     {
-        DateTime startTime = DateTime.Now;
-        TimeSpan timeSpan = TimeSpan.FromSeconds(3);
-        double timeFactor = 2.0;
+        var startTime = DateTime.Now;
+        var timeSpan = TimeSpan.FromSeconds(3);
+        const double timeFactor = 2.0;
 
         var realTimeTimer = new RealTimeSimulationTimer(timeFactor, timeSpan, startTime);
 
-        DateTime previousTimestamp = DateTime.MinValue;
-
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             var realTimeNextStep = await realTimeTimer.GetNextStep();
 

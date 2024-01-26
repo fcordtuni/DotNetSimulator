@@ -10,14 +10,14 @@ public class TestBattery
         new List<object[]>
         {
             new object[] {new KW(100.0), new TimeStep(DateTime.Now, DateTime.Now.AddDays(1))},
-            new object[] {new KW(150.3), new TimeStep(DateTime.Now, DateTime.Now.AddSeconds(120))},
+            new object[] {new KW(150.3), new TimeStep(DateTime.Now, DateTime.Now.AddSeconds(120))}
         };
 
     public static IEnumerable<object[]> BatteryConstructorData() =>
         new List<object[]>
         {
             new object[] { new KWH(150), new KWH(245), new KWH(150) },
-            new object[] { new KWH(350), new KWH(245), new KWH(245) },
+            new object[] { new KWH(350), new KWH(245), new KWH(245) }
         };
 
     [Theory, MemberData(nameof(ProducedBatteryData))]

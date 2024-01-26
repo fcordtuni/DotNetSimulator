@@ -36,12 +36,26 @@ public class TestKWH
         kwhResult = new KWH(first) + new KWH(second);
         Assert.Equal(dResult, kwhResult.Amount);
     }
-
-    public static IEnumerable<object[]> KwhKwTimespanTestData() =>
-        new List<object[]>
+    
+    /*
+     *
+     *     public static TheoryData<DateTime, DateTime, TimeSpan> TimeSpanData() =>
+        new()
         {
-                new object[] { new KW(10.0), new TimeSpan(0, 1, 0, 0), new KWH(10.0) },
-                new object[] { new KW(10.0), new TimeSpan(0, 0, 30, 0), new KWH(5.0) },
+            { new DateTime(2004, 1, 12, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20), TimeSpan.FromSeconds(20) },
+            {
+                new DateTime(2004, 1, 11, 12, 0, 0), new DateTime(2004, 1, 12, 12, 0, 20),
+                TimeSpan.FromSeconds(20).Add(TimeSpan.FromDays(1))
+            }
+        };
+     */
+
+    public static TheoryData<KW, TimeSpan, KWH> KwhKwTimespanTestData() =>
+        new()
+        {
+            { new KW(10.0), new TimeSpan(0, 1, 0, 0), new KWH(10.0) },
+            { new KW(10.0), new TimeSpan(0, 0, 30, 0), new KWH(5.0) }
+
         };
 
     [Theory, MemberData(nameof(KwhKwTimespanTestData))]

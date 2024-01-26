@@ -17,9 +17,9 @@ namespace DotNetSimulator.Utils;
 internal class DAG<T> where T : class
 {
 
-    private readonly ISet<T> _nodes = new HashSet<T>();
-    private readonly IDictionary<T, HashSet<T>> _incomingEdges = new Dictionary<T, HashSet<T>>();
-    private readonly IDictionary<T, HashSet<T>> _outgoingEdges = new Dictionary<T, HashSet<T>>();
+    private readonly HashSet<T> _nodes = [];
+    private readonly Dictionary<T, HashSet<T>> _incomingEdges = new();
+    private readonly Dictionary<T, HashSet<T>> _outgoingEdges = new();
 
     /// <summary>
     /// adds a node to the graph
@@ -53,7 +53,7 @@ internal class DAG<T> where T : class
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
-    private IEnumerable<T> OutgoingNodes(T node)
+    private HashSet<T> OutgoingNodes(T node)
     {
         return _outgoingEdges.TryGetValue(node, out var outgoingNodes) ? outgoingNodes : [];
     }
