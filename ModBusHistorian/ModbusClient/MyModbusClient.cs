@@ -4,12 +4,12 @@ namespace ModBusHistorian.ModbusClient
 {
     public class MyModbusClient : IMyModbusClient
     {
-        public MyModbusClient(string ipAddress, int pollingTimeMs, int reconnectTimeMs, bool isAutoReconnectEnabled)
+        public MyModbusClient(IConfiguration iConfig)
         {
-            IpAddress = ipAddress;
-            PollingTimeMs = pollingTimeMs;
-            ReconnectTimeMs = reconnectTimeMs;
-            IsAutoReconnectEnabled = isAutoReconnectEnabled;
+            IpAddress = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1");
+            PollingTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("PollingTimeMs", 1000);
+            ReconnectTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("ReconnectTimeMs", 1000);
+            IsAutoReconnectEnabled = iConfig.GetSection("ModbusHistorian").GetValue("AutoReconnect", true);
             _inputRegisters = new Dictionary<int, int>();
             _pollingTasks = new List<Task>();
             _client = new EasyModbus.ModbusClient();
