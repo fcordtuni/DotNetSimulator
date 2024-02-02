@@ -65,7 +65,7 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         }
 
         step = TimeStep.Clamp(step, minTime, maxTime);
-        var productionPercentage = (-Math.Cos(step.Start.TimeOfDay.TotalHours * twoPi) -
+        var productionPercentage = (Math.Cos(step.Start.TimeOfDay.TotalHours * twoPi) -
                                     Math.Cos(step.End.TimeOfDay.TotalHours * twoPi)) / 2;
         return productionPercentage * maxProduction * step.Duration;
     }
