@@ -36,7 +36,7 @@ public class HistorianController : ControllerBase
     /// <param name="reference"></param>
     /// <param name="seconds">Amount of seconds data points are returned</param>
     /// <returns></returns>
-    [HttpGet("dataPoints/{reference}/{seconds}")]
+    [HttpGet("dataPoints/{reference}/{seconds:int}")]
     public async Task<IEnumerable<DataPoint>> GetDataPoints(string reference, int seconds)
     {
         var endDateTime = DateTime.UtcNow;
