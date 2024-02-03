@@ -18,4 +18,9 @@ public class MissingConfigurationException : Exception
     {
         return new MissingConfigurationException($"Missing configuration for {influxdbToken}");
     }
+
+    public static Exception Create(IConfigurationSection section, String key)
+    {
+        return new MissingConfigurationException($"Missing app-configuration {section.Path}.{key}");
+    }
 }

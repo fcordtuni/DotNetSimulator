@@ -53,6 +53,8 @@ public interface IMyModbusClient
     /// <returns></returns>
     int? GetInputRegisterValue(int address);
 
+    short[] GetInputRegisterValues(int from, int to);
+
     void WriteCoil(int address, bool value);
     void Dispose();
 }

@@ -25,11 +25,11 @@ logic.AddLinks(new (ISimulationElement, ISimulationElement)[] { (sp1, pc), (sp2,
 
 var server = new EasyModbus.ModbusServer();
 EasyModbusModbusMapper mapper = new(server);
-sp1.Register(mapper);
-sp2.Register(mapper);
-sp3.Register(mapper);
-pc.Register(mapper);
-bt.Register(mapper);
+sp1.Register(mapper); //0-19
+sp2.Register(mapper); //20-39
+sp3.Register(mapper); //40-59
+pc.Register(mapper); //60-79
+bt.Register(mapper); //80-103
 
 var simulationTask = logic.RunSimulation();
 server.Listen();

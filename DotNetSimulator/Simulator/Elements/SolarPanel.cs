@@ -54,19 +54,13 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         const double twoPi = double.Pi * 2;
         var minTime = TimeSpan.FromHours(6);
         var maxTime = TimeSpan.FromHours(18);
-        if (step.End.TimeOfDay < minTime)
+        if (step.End.TimeOfDay < minTime || step.Start.TimeOfDay > maxTime)
         {
             return KWH.Zero;
         }
 
-        if (step.Start.TimeOfDay > maxTime)
-        {
-            return KWH.One * maxProduction.Amount;
-        }
-
         step = TimeStep.Clamp(step, minTime, maxTime);
-        var productionPercentage = (Math.Cos(step.Start.TimeOfDay.TotalHours * twoPi) -
-                                    Math.Cos(step.End.TimeOfDay.TotalHours * twoPi)) / 2;
+        var productionPercentage = -Math.Cos(twoPi * step.Start.TimeOfDay.TotalDays);
         return productionPercentage * maxProduction * step.Duration;
     }
 

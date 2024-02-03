@@ -6,7 +6,8 @@ public class MyModbusClient : IMyModbusClient
 {
     public MyModbusClient(IConfiguration iConfig)
     {
-        IpAddress = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1");
+        IpAddress = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1") ?? "127.0.0.1";
+        Port = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("Port", 502);
         PollingTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("PollingTimeMs", 1000);
         ReconnectTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("ReconnectTimeMs", 1000);
         IsAutoReconnectEnabled = iConfig.GetSection("ModbusHistorian").GetValue("AutoReconnect", true);
@@ -75,6 +76,18 @@ public class MyModbusClient : IMyModbusClient
             return null;
         }
         return value;
+    }
+
+    public short[] GetInputRegisterValues(int from, int to)
+    {
+        var rVal = new short[to - from];
+        for (var i = 0; i < rVal.Length; i++)
+        {
+            _inputRegisters.TryGetValue(i + from, out var val);
+            rVal[i] = (short)val;
+        }
+
+        return rVal;
     }
 
     public void WriteCoil(int address, bool value)
