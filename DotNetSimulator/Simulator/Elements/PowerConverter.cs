@@ -70,7 +70,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
     /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
-        if (_mapper != null && !_mapper.GetDiscreteInputs(this)[0])
+        if (_mapper != null && !_mapper.GetCoils(this)[0])
         {
             StepProduction = KWH.Zero;
             Logger.Debug("{this}: Device Disabled, no Production", this);
@@ -107,7 +107,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
                 new(16, 2, "Current Maximum Output in Watt"),
                 new(18, 2, "Current Output in Watt")
             });
-        _mapper.RegisterDiscreteInputs(this,
+        _mapper.RegisterCoils(this,
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 1, "Device Enabled")

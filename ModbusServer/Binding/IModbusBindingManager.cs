@@ -29,7 +29,7 @@ internal interface IModbusBindingManager<T>
 internal class EasyModbusModbusBindingManager<T>(T[] content) : IModbusBindingManager<T>
 {
     private readonly IDictionary<IModbusDevice, ModbusBindingDescriptor> _descDict = new Dictionary<IModbusDevice, ModbusBindingDescriptor>();
-    private ModbusBindingDescriptor _lastAdded;
+    private ModbusBindingDescriptor _lastAdded = new ModbusBindingDescriptor([],1); //start at 1
 
     public void RegisterBinding(IModbusDevice device, ICollection<ModbusInterfaceDescriptor> interfaces)
     {

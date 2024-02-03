@@ -29,10 +29,10 @@ internal class RepositoryManagementService(
             Logger.Info("Startup: Connecting to MODBUS server and configuring it.");
 
             await myModbusClient.Connect(cancellationToken);
-            myModbusClient.AddReadInputRegisterPolling(new AddressRange(10, 10));
 
             Logger.Info("Startup: Initializing data series recorder.");
             var coils = new HashSet<int>();
+            int start = int.MaxValue, end = 0;
             foreach (var deviceInfo in iConfig.GetSection("ModbusHistorian")
                          .GetSection("ModbusServer").GetSection("Devices").GetChildren())
             {
@@ -58,6 +58,9 @@ internal class RepositoryManagementService(
                 {
                     throw new ArgumentException($"to <= from in configuration {deviceInfo.Path}");
                 }
+
+                start = Math.Min(start, from);
+                end = Math.Max(end, to);
                 _recorders.Add(new DataSeriesRecorder<double?>(
                     repositoryService, 
                     new TimeSpan(0,0,frequencySec),
@@ -73,7 +76,7 @@ internal class RepositoryManagementService(
                     coils.Add(deviceInfo.GetValue("enableCoil", 0));
                 }
             }
-
+            myModbusClient.AddReadInputRegisterPolling(new AddressRange(start, end - Math.Min(start, end)));
             // This call "starts" the production for simulation purposes
             Logger.Info("Startup: Starting production for simulation purposes.");
             foreach(var coil in coils)
