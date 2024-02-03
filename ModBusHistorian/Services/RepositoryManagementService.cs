@@ -5,7 +5,6 @@ using ModBusHistorian.ModbusClient;
 using ModBusHistorian.Models;
 using ModBusHistorian.Repositories;
 using NLog;
-using ILogger = NLog.ILogger;
 
 namespace ModBusHistorian.Services;
 
@@ -18,8 +17,8 @@ internal class RepositoryManagementService(
     IConfiguration iConfig)
     : IHostedService, IDisposable
 {
-    private readonly List<DataSeriesRecorder<double?>> _recorders = new();
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private readonly List<DataSeriesRecorder<double?>> _recorders = [];
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {

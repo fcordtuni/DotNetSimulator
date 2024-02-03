@@ -89,9 +89,9 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         _mapper.RegisterHoldingRegisters(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 16, "Serial Number"),
-                new(16, 2, "Max Production in Watt"),
-                new(18, 2, "Current Production in Watt")
+                new(0, 16),
+                new(16, 2),
+                new(18, 2)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

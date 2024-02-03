@@ -106,11 +106,11 @@ public class Battery : ISimulationElement, IModbusDevice
         _mapper.RegisterHoldingRegisters(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 16, "Serial Number"),
-                new(16, 2, "Max Capacity in watt-seconds"),
-                new(18, 2, "Current Capacity in watt-seconds"),
-                new(20, 2, "Maximum Input in Watt"),
-                new(22, 2, "Maximum Output in Watt")
+                new(0, 16),
+                new(16, 2),
+                new(18, 2),
+                new(20, 2),
+                new(22, 2)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

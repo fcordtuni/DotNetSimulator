@@ -8,11 +8,8 @@ namespace ModbusDeviceLibrary.Modbus;
 /// </summary>
 /// <param name="offset">The local offset (starting a 0) for this value mapping</param>
 /// <param name="length">The length this value has</param>
-/// <param name="description">A verbal description of the value</param>
-public readonly struct ModbusInterfaceDescriptor(int offset, int length, string description)
+public readonly struct ModbusInterfaceDescriptor(int offset, int length)
 {
     public int Offset { get; } = offset;
     public int Length { get; } = length;
-    public string Description { get; } = description;
-
 }

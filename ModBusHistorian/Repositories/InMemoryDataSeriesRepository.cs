@@ -6,7 +6,7 @@ namespace ModBusHistorian.Repositories;
 /// <summary>
 /// Implements a data series repository in memory.
 /// </summary>
-internal class InMemoryDataSeriesRepository : IDataSeriesRepository
+internal sealed class InMemoryDataSeriesRepository : IDataSeriesRepository
 {
 	private readonly ConcurrentDictionary<Reference, ConcurrentDictionary<DateTime, object?>> _dataSeries = new();
 
@@ -43,7 +43,7 @@ internal class InMemoryDataSeriesRepository : IDataSeriesRepository
 
 	}
 
-	public virtual void Dispose()
+	public void Dispose()
 	{
 		// Intentionally left empty. In memory repository does not need to dispose anything.
 	}

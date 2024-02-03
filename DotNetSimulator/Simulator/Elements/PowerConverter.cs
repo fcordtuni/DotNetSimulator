@@ -103,14 +103,14 @@ public class PowerConverter : ISimulationElement, IModbusDevice
         _mapper.RegisterHoldingRegisters(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 16, "Serial Number"),
-                new(16, 2, "Current Maximum Output in Watt"),
-                new(18, 2, "Current Output in Watt")
+                new(0, 16),
+                new(16, 2),
+                new(18, 2)
             });
         _mapper.RegisterCoils(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 1, "Device Enabled")
+                new(0, 1)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

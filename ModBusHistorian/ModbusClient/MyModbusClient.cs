@@ -2,32 +2,19 @@
 
 namespace ModBusHistorian.ModbusClient;
 
-public class MyModbusClient : IMyModbusClient
+public class MyModbusClient(IConfiguration iConfig) : IMyModbusClient
 {
-    public MyModbusClient(IConfiguration iConfig)
-    {
-        IpAddress = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1") ?? "127.0.0.1";
-        Port = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("Port", 502);
-        PollingTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("PollingTimeMs", 1000);
-        ReconnectTimeMs = iConfig.GetSection("ModbusHistorian").GetValue("ReconnectTimeMs", 1000);
-        IsAutoReconnectEnabled = iConfig.GetSection("ModbusHistorian").GetValue("AutoReconnect", true);
-        _inputRegisters = new Dictionary<int, int>();
-        _pollingTasks = new List<Task>();
-        _client = new EasyModbus.ModbusClient();
-        _taskTokenSource = new CancellationTokenSource();
-    }
+    private readonly List<Task> _pollingTasks = [];
+    private readonly Dictionary<int, int> _inputRegisters = new();
 
-    public int PollingTimeMs { get; set; }
-    public int ReconnectTimeMs { get; set; }
-    public bool IsAutoReconnectEnabled { get; set; }
-    public string IpAddress { get; set; }
-    public int Port { get; set; }
+    private readonly EasyModbus.ModbusClient _client = new();
+    private readonly CancellationTokenSource _taskTokenSource = new();
+    public int PollingTimeMs { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("PollingTimeMs", 1000);
+    public int ReconnectTimeMs { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("ReconnectTimeMs", 1000);
+    public bool IsAutoReconnectEnabled { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("AutoReconnect", true);
+    public string IpAddress { get; set; } = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1") ?? "127.0.0.1";
+    public int Port { get; set; } = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("Port", 502);
 
-    private readonly IList<Task> _pollingTasks;
-    private readonly IDictionary<int, int> _inputRegisters;
-
-    private readonly EasyModbus.ModbusClient _client;
-    private readonly CancellationTokenSource _taskTokenSource;
     public Task Connect(CancellationToken cancellationToken)
     {
         return Task.Run(() =>

@@ -31,7 +31,6 @@ public class KWH(double amount)
 
     public static readonly KWH Infinity = new(double.PositiveInfinity);
     public static readonly KWH Zero = new(0);
-    public static readonly KWH One = new(1);
 
     /// <summary>
     /// returns the maximum of the given values
