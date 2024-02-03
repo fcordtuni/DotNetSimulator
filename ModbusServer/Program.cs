@@ -11,10 +11,12 @@ using NLog.Web;
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Info("starting setup");
 
+var startTime = DateTime.Today + new TimeSpan(12, 0, 0);
+
 //setting up the Simulator
 SimulationLogic logic =
-    new(ISimulationTimer.FastForward(DateTime.Now.AddDays(-1), DateTime.Now, TimeSpan.FromSeconds(10))
-        .AndThen(ISimulationTimer.RealTime(1, TimeSpan.FromSeconds(1), DateTime.Now)));
+    new(ISimulationTimer.FastForward(startTime.AddDays(-1), startTime, TimeSpan.FromSeconds(10))
+        .AndThen(ISimulationTimer.RealTime(1, TimeSpan.FromSeconds(1), startTime)));
 var sp1 = new SolarPanel("SP1", new KW(0.2));
 var sp2 = new SolarPanel("SP2", new KW(0.3));
 var sp3 = new SolarPanel("SP3", new KW(0.17));
@@ -25,11 +27,11 @@ logic.AddLinks(new (ISimulationElement, ISimulationElement)[] { (sp1, pc), (sp2,
 
 var server = new EasyModbus.ModbusServer();
 EasyModbusModbusMapper mapper = new(server);
-sp1.Register(mapper); //0-19
-sp2.Register(mapper); //20-39
-sp3.Register(mapper); //40-59
-pc.Register(mapper); //60-79
-bt.Register(mapper); //80-103
+sp1.Register(mapper); //0-23
+sp2.Register(mapper); //24-47
+sp3.Register(mapper); //48-71
+pc.Register(mapper); //72-95
+bt.Register(mapper); //96-128
 
 var simulationTask = logic.RunSimulation();
 server.Listen();

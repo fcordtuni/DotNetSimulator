@@ -71,7 +71,7 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         _stepProduction = GetProductionForTimeStep(step, _maxProduction);
         if (_mapper != null)
         {
-            ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)((_stepProduction / step).Amount * 1000));
+            ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[20..24], (_stepProduction / step).Amount * 1000);
         }
         Logger.Debug("{this}: Producing {amount} Watt", this, (_stepProduction / step).Amount * 1000);
     }
@@ -90,13 +90,13 @@ public class SolarPanel : ISimulationElement, IModbusDevice
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 16),
-                new(16, 2),
-                new(18, 2)
+                new(16, 4),
+                new(20, 4)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);
         ModbusUtils.WriteHoldingRegister(holdingRegisters[..16], _serial);
 
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..18], (int)(_maxProduction.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..20], _maxProduction.Amount * 1000);
     }
 }

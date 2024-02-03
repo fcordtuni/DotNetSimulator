@@ -26,7 +26,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProduction = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[16..18], (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[16..20], (value / _currentTimeStep).Amount * 1000);
             }
         }
     }
@@ -39,7 +39,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProvision = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[20..24], (value / _currentTimeStep).Amount * 1000);
             }
         }
     }
@@ -104,8 +104,8 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 16),
-                new(16, 2),
-                new(18, 2)
+                new(16, 4),
+                new(20, 4)
             });
         _mapper.RegisterCoils(this,
             new List<ModbusInterfaceDescriptor>

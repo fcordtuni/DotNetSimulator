@@ -38,16 +38,19 @@ public class MyModbusClient(IConfiguration iConfig) : IMyModbusClient
     {
         return Task.Run(() =>
         {
-            if (_client.Connected)
+            while (!taskToken.IsCancellationRequested)
             {
-                var registers = _client.ReadHoldingRegisters(range.StartingAddress, range.Quantity);
-                for (var i = 0; i < registers.Length; i++)
+                if (_client.Connected)
                 {
-                    _inputRegisters[range.StartingAddress + i] = registers[i];
+                    var registers = _client.ReadHoldingRegisters(range.StartingAddress, range.Quantity);
+                    for (var i = 0; i < registers.Length; i++)
+                    {
+                        _inputRegisters[range.StartingAddress + i] = registers[i];
+                    }
                 }
-            }
 
-            Task.Delay(PollingTimeMs, taskToken);
+                Task.Delay(PollingTimeMs, taskToken);
+            }
         }, taskToken);
     }
 

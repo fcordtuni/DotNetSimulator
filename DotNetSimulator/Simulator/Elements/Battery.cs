@@ -26,7 +26,7 @@ public class Battery : ISimulationElement, IModbusDevice
             _currentChargeLevel = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[18..20], (int)(value.Amount * 1000 * 3600));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[20..24], value.Amount * 1000 * 3600);
             }
         }
     }
@@ -107,16 +107,16 @@ public class Battery : ISimulationElement, IModbusDevice
             new List<ModbusInterfaceDescriptor>
             {
                 new(0, 16),
-                new(16, 2),
-                new(18, 2),
-                new(20, 2),
-                new(22, 2)
+                new(16, 4),
+                new(20, 4),
+                new(24, 4),
+                new(28, 4)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);
         ModbusUtils.WriteHoldingRegister(holdingRegisters[..16], _serial);
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..18], (int)(_capacity.Amount * 1000 * 3600));
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[20..22], (int)(_maximumInput.Amount * 1000));
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[22..24], (int)(_maximumOutput.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..20], _capacity.Amount * 1000 * 3600);
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[24..28], _maximumInput.Amount * 1000);
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[28..32], _maximumOutput.Amount * 1000);
     }
 }

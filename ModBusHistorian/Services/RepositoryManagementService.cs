@@ -67,7 +67,7 @@ internal class RepositoryManagementService(
                     {
                         
                         var value = myModbusClient.GetInputRegisterValues(from, to);
-                        return ModbusUtils.ReadHoldingRegisterInt(value);
+                        return ModbusUtils.ReadHoldingRegisterDouble(value);
                     }, new Reference(deviceInfo.Key))
                 );
                 if (deviceInfo.GetSection("enableCoil").Exists())

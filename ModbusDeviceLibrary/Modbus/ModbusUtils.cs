@@ -23,6 +23,22 @@ public static class ModbusUtils
         {
             holdingRegister[i] = (short)convertedValue[i];
         }
+    }    
+    
+    /// <summary>
+    /// Writes the given double to the holding register. Takes sizeof(double) number of array elements
+    /// </summary>
+    /// <param name="holdingRegister">a Span pointing to the position of the holding register the double should be written to</param>
+    /// <param name="value"></param>
+    public static void WriteHoldingRegister(Span<short> holdingRegister, double value)
+    {
+        var convertedValue = ModbusClient.ConvertDoubleToRegisters(value);
+
+
+        for (var i = 0; i < convertedValue.Length; i++)
+        {
+            holdingRegister[i] = (short)convertedValue[i];
+        }
     }
 
     /// <summary>
@@ -68,5 +84,16 @@ public static class ModbusUtils
     {
         var registers = new int[]{ holdingRegister[0], holdingRegister[1] };
         return ModbusClient.ConvertRegistersToInt(registers);
+    }
+    
+    /// <summary>
+    /// Reads a Double out of the given holding register, inverse of <see cref="WriteHoldingRegister(System.Span{short},double)"/>
+    /// </summary>
+    /// <param name="holdingRegister"></param>
+    /// <returns></returns>
+    public static double ReadHoldingRegisterDouble(Span<short> holdingRegister)
+    {
+        var registers = new int[]{ holdingRegister[0], holdingRegister[1], holdingRegister[2], holdingRegister[3] };
+        return ModbusClient.ConvertRegistersToDouble(registers);
     }
 }
