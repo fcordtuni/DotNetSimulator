@@ -16,14 +16,16 @@ namespace ModBusHistorian.Controllers;
 public class SimpleJsonController : ControllerBase
 {
     private readonly ILogger<SimpleJsonController> _logger;
+    private readonly IDataSeriesRepository _repository;
 
     /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="logger">Logger</param>
-    public SimpleJsonController(ILogger<SimpleJsonController> logger)
+    public SimpleJsonController(ILogger<SimpleJsonController> logger, IDataSeriesRepository repository)
     {
         _logger = logger;
+        _repository = repository;
     }
 
     /// <summary>
@@ -40,8 +42,9 @@ public class SimpleJsonController : ControllerBase
     [HttpPost("search")]
     public async Task<IActionResult> Search()
     {
-        // TODO: return references
-        return Ok(new List<ReferenceViewModel>());
+        var references = await _repository.GetReferencesAsync();
+        var referenceViewModels = references.Select(r => new ReferenceViewModel { Name = r.Name }).ToList();
+        return Ok(referenceViewModels);
     }
 
     /// <summary>
@@ -57,51 +60,23 @@ public class SimpleJsonController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var smoothingWindow = TimeSpan.FromTicks(5 * TimeSpan.TicksPerMinute);
-        var halfSmoothingWindow = 0.5 * smoothingWindow;
-
-        var dataFrom = query.Range.From - halfSmoothingWindow;
-        var dataTo = query.Range.To + halfSmoothingWindow;
-
-        var samplingInterval = new TimeSpan(query.IntervalMs * TimeSpan.TicksPerMillisecond);
-
-        // Ensure that there is a valid target
-        if (query.Targets.Any(t => string.IsNullOrWhiteSpace(t.Target)))
-        {
-            return Ok(new TimeSeriesViewModel[] { });
-        }
-
-        // Ensure that there is a valid target
-        if (query.Targets.Any(t => string.IsNullOrWhiteSpace(t.Target)))
-        {
-            return Ok(new TimeSeriesViewModel[] { });
-        }
-
         var resultList = new List<TimeSeriesViewModel>();
-        //foreach (var target in query.Targets)
-        //{
-        // TODO: Create a reference from the target
-        // TODO: Get data points from the repository
 
+        foreach (var target in query.Targets.Where(t => !string.IsNullOrWhiteSpace(t.Target)))
+        {
+            var endDateTime = DateTime.UtcNow;
+            var startDateTime = endDateTime.Subtract(TimeSpan.FromMilliseconds(query.IntervalMs));
+            var dataPoints = await _repository.GetDataPointsAsync(target.Target, startDateTime, endDateTime);
 
-        // This code is needed to adapt the data points to the Grafana format - that means wie have to 
-        // build a list of data points adapted to the sampling interval and smoothing window
-        // var r = dataPoints.FilterDataPoints(reference.Name, query.Range.From, query.Range.To, 
-        //         samplingInterval, smoothingWindow)
-        //     .Select(x => new[] { x.Value, x.DateTime.ToUnixEpochInMilliSecondsTime() }).ToArray();
+            var timeSeriesData = dataPoints.Select(dp => new object[] { dp.Value, dp.Timestamp.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
 
-        // }
+            resultList.Add(new TimeSeriesViewModel
+            {
+                Target = target.Target,
+                Datapoints = timeSeriesData
+            });
+        }
 
         return Ok(resultList);
-    }
-
-    /// <summary>
-    /// Return annotations. In your sample unused.
-    /// </summary>
-    /// <returns></returns>
-    [HttpPost("annotations")]
-    public IActionResult GetAnnotations()
-    {
-        return Ok();
     }
 }
