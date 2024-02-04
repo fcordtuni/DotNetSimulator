@@ -33,12 +33,12 @@ public interface IMyModbusClient
     /// <summary>
     /// Connects to the modbus server
     /// </summary>
-    void Connect();
+    Task Connect(CancellationToken cancellationToken);
     
     /// <summary>
     /// Disconnects from the modbus server
     /// </summary>
-    void Disconnect();
+    Task Disconnect();
 
     /// <summary>
     /// Defines an address range that gets polled as MODBUS InputRegister 
@@ -52,6 +52,8 @@ public interface IMyModbusClient
     /// <param name="address">The address (needs to be defined before for polling)</param>
     /// <returns></returns>
     int? GetInputRegisterValue(int address);
+
+    short[] GetInputRegisterValues(int from, int to);
 
     void WriteCoil(int address, bool value);
     void Dispose();

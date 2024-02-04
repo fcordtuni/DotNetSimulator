@@ -9,17 +9,9 @@ namespace ModBusHistorian.Controllers;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class HistorianController : ControllerBase
+public class HistorianController(ILogger<HistorianController> logger, IDataSeriesRepository repository)
+    : ControllerBase
 {
-    private readonly ILogger<HistorianController> _logger;
-    private readonly IDataSeriesRepository _repository;
-
-    public HistorianController(ILogger<HistorianController> logger, IDataSeriesRepository repository)
-    {
-        _logger = logger;
-        _repository = repository;
-    }
-
     /// <summary>
     /// Get all references.
     /// </summary>
@@ -27,7 +19,7 @@ public class HistorianController : ControllerBase
     [HttpGet("references")]
     public async Task<IEnumerable<Reference>> GetReferences()
     {
-        return await _repository.GetReferencesAsync();
+        return await repository.GetReferencesAsync();
     }
     
     /// <summary>
@@ -36,12 +28,12 @@ public class HistorianController : ControllerBase
     /// <param name="reference"></param>
     /// <param name="seconds">Amount of seconds data points are returned</param>
     /// <returns></returns>
-    [HttpGet("dataPoints/{reference}/{seconds}")]
+    [HttpGet("dataPoints/{reference}/{seconds:int}")]
     public async Task<IEnumerable<DataPoint>> GetDataPoints(string reference, int seconds)
     {
         var endDateTime = DateTime.UtcNow;
         var startDateTime = endDateTime.Subtract(new TimeSpan(0, 0, seconds));
-        _logger.LogTrace("something to do");
-        return await _repository.GetDataPointsAsync(reference, startDateTime, endDateTime);
+        logger.LogTrace("something to do");
+        return await repository.GetDataPointsAsync(reference, startDateTime, endDateTime);
     }
 }

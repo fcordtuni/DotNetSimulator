@@ -3,6 +3,11 @@
 using ModbusDeviceLibrary.Modbus;
 
 namespace ModbusServer.Binding;
+
+/// <summary>
+/// concrete implementation of an IModbusMapper using the EasyModbus library, uses EasyModbusBindingManagers for managing the bindings
+/// </summary>
+/// <param name="server"></param>
 internal class EasyModbusModbusMapper(EasyModbus.ModbusServer server) : IModbusMapper
 {
     private readonly EasyModbusModbusBindingManager<bool> _coilsBindingManager = new(server.coils.localArray);

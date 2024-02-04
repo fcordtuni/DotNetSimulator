@@ -26,9 +26,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProduction = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(
-                    _mapper.GetHoldingRegisters(this)[(16 + 0 * sizeof(int))..], 
-                (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[16..20], (value / _currentTimeStep).Amount * 1000);
             }
         }
     }
@@ -41,9 +39,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             _stepProvision = value;
             if (_mapper != null)
             {
-                ModbusUtils.WriteHoldingRegister(
-                    _mapper.GetHoldingRegisters(this)[(16 + 1 * sizeof(int))..],
-                    (int)((value / _currentTimeStep).Amount * 1000));
+                ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[20..24], (value / _currentTimeStep).Amount * 1000);
             }
         }
     }
@@ -74,7 +70,7 @@ public class PowerConverter : ISimulationElement, IModbusDevice
     /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
-        if (_mapper != null && _mapper.GetDiscreteInputs(this)[0])
+        if (_mapper != null && !_mapper.GetCoils(this)[0])
         {
             StepProduction = KWH.Zero;
             Logger.Debug("{this}: Device Disabled, no Production", this);
@@ -107,14 +103,14 @@ public class PowerConverter : ISimulationElement, IModbusDevice
         _mapper.RegisterHoldingRegisters(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 16, "Serial Number"),
-                new(16 + 0 * sizeof(int), sizeof(int), "Current Maximum Output in Watt"),
-                new(16 + 1 * sizeof(int), sizeof(int), "Current Output in Watt"),
+                new(0, 16),
+                new(16, 4),
+                new(20, 4)
             });
-        _mapper.RegisterDiscreteInputs(this,
+        _mapper.RegisterCoils(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 1, "Device Disabled")
+                new(0, 1)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);

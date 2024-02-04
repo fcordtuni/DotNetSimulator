@@ -1,65 +1,93 @@
+//Author: fcordt
+
+using ModbusDeviceLibrary.Modbus;
 using ModBusHistorian.ModbusClient;
 using ModBusHistorian.Models;
 using ModBusHistorian.Repositories;
 using NLog;
-using ILogger = NLog.ILogger;
 
 namespace ModBusHistorian.Services;
 
 /// <summary>
 /// This is a hosted service that initializes the repository service and adds a data series recorder to it.
 /// </summary>
-internal class RepositoryManagementService : IHostedService
+internal class RepositoryManagementService(
+    IMyModbusClient myModbusClient,
+    IDataSeriesRepository repositoryService,
+    IConfiguration iConfig)
+    : IHostedService, IDisposable
 {
-    private readonly IMyModbusClient _myModbusClient;
-    private readonly IDataSeriesRepository _repositoryService;
-    private readonly List<DataSeriesRecorder<double?>> _recorders;
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private readonly List<DataSeriesRecorder<double?>> _recorders = [];
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-    public RepositoryManagementService(IMyModbusClient myModbusClient, IDataSeriesRepository repositoryService)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _myModbusClient = myModbusClient;
-        _repositoryService = repositoryService;
-        _recorders = new List<DataSeriesRecorder<double?>>();
-    }
-
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        var time = new TimeSpan(0, 0, 10);
-
         // Connects to modbus server
         try
         {
             Logger.Info("Startup: Connecting to MODBUS server and configuring it.");
 
-            _myModbusClient.Connect();
-            _myModbusClient.AddReadInputRegisterPolling(new AddressRange(10, 10));
+            await myModbusClient.Connect(cancellationToken);
 
             Logger.Info("Startup: Initializing data series recorder.");
-            var seriesRecorder = new DataSeriesRecorder<double?>(_repositoryService, time,
-                () =>
+            var coils = new HashSet<int>();
+            int start = int.MaxValue, end = 0;
+            foreach (var deviceInfo in iConfig.GetSection("ModbusHistorian")
+                         .GetSection("ModbusServer").GetSection("Devices").GetChildren())
+            {
+                var from = deviceInfo.GetValue("from", -1);
+                var to = deviceInfo.GetValue("to", -1);
+                var frequencySec = deviceInfo.GetValue("refreshPeriodS", 10);
+                if (from < 0)
                 {
-                    var value = _myModbusClient.GetInputRegisterValue(10 + 6);
-                    if (value == null)
+                    throw MissingConfigurationException.Create(deviceInfo, "from");
+                }
+
+                if (to < 0)
+                {
+                    throw MissingConfigurationException.Create(deviceInfo, "to");
+                }
+
+                if (frequencySec <= 0)
+                {
+                    throw new ArgumentException($"refreshPeriodS <= 0 in configuration {deviceInfo.Path}");
+                }
+
+                if (to <= from)
+                {
+                    throw new ArgumentException($"to <= from in configuration {deviceInfo.Path}");
+                }
+
+                start = Math.Min(start, from);
+                end = Math.Max(end, to);
+                _recorders.Add(new DataSeriesRecorder<double?>(
+                    repositoryService, 
+                    new TimeSpan(0,0,frequencySec),
+                    () =>
                     {
-                        return null;
-                    }
-
-                    return Convert.ToDouble(value);
-                }, new Reference("Power_W"));
-            _recorders.Add(seriesRecorder);
-
+                        
+                        var value = myModbusClient.GetInputRegisterValues(from, to);
+                        return ModbusUtils.ReadHoldingRegisterDouble(value);
+                    }, new Reference(deviceInfo.Key))
+                );
+                if (deviceInfo.GetSection("enableCoil").Exists())
+                {
+                    coils.Add(deviceInfo.GetValue("enableCoil", 0));
+                }
+            }
+            myModbusClient.AddReadInputRegisterPolling(new AddressRange(start, end - Math.Min(start, end)));
             // This call "starts" the production for simulation purposes
             Logger.Info("Startup: Starting production for simulation purposes.");
-            _myModbusClient.WriteCoil(10, true);
+            foreach(var coil in coils)
+            {
+                myModbusClient.WriteCoil(coil, true);
+            }
         }
         catch (Exception e)
         {
             Logger.Error(e);
             throw;
         }
-
-        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -73,7 +101,7 @@ internal class RepositoryManagementService : IHostedService
             }
             
             Logger.Info("Shutdown: Disconnecting from MODBUS server.");
-            _myModbusClient.Disconnect();
+            myModbusClient.Disconnect();
         }
         catch (Exception e)
         {
@@ -82,5 +110,10 @@ internal class RepositoryManagementService : IHostedService
         }
 
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        repositoryService.Dispose();
     }
 }

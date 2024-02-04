@@ -41,39 +41,39 @@ public class SolarPanel : ISimulationElement, IModbusDevice
     }
 
     /// <summary>
-    /// will calculate the Production for a given TimeSpan like the following:
-    /// 
-    /// considering a sinusoid production curve, we can estimate the production as a cosine centered around 12 o'clock
-    /// for now: cosine[-pi, +pi] = cosine[0:00, 24:00]
-    /// talking about total production, we can use the integral(sin(x)), cos(x)
-    /// but, since we only care about the [-pi/2, pi/2] part (i.e. the positive cosine part), we define the function as follows:
-    /// P(t) := (sine(t) + 1) / 2 if t € [-pi/2, pi/2], 0 if t € [-pi, -pi/2[, 1 else
+    /// Uses numerical integration (quadrature interpolation) in order to get the provided power
+    ///
+    /// For now the cos function (more specifically: 0 for x€[0, 0.25[, -cos(x * 2 * PI) for x€[0.25,0.75], 1 for x € ]0.75, 1]) is taken as a provider
+    /// todo: later on we need to provide some variation, i.e. weather, etc...
     /// </summary>
-    /// <param name="timeOfDay"></param>
-    /// <returns></returns>
-    private static double GetTotalProductionForTimeOfDay(TimeSpan timeOfDay)
+    /// <param name="step">the interval to be integrated</param>
+    /// <param name="maxProduction">the multiplicative scaling factor</param>
+    /// <returns>the amount of KWH produced</returns>
+    private static KWH GetProductionForTimeStep(TimeStep step, KW maxProduction)
     {
-        var timeTransferred = ((double)timeOfDay.Ticks / TimeSpan.TicksPerDay - 0.5) * 2 * Math.PI;
-        return timeTransferred switch
+        const double twoPi = double.Pi * 2;
+        var minTime = TimeSpan.FromHours(6);
+        var maxTime = TimeSpan.FromHours(18);
+        if (step.End.TimeOfDay < minTime || step.Start.TimeOfDay > maxTime)
         {
-            < -Math.PI / 2 => 0,
-            > Math.PI / 2 => 1,
-            _ => (Math.Sin(timeTransferred) + 1) / 2
-        };
+            return KWH.Zero;
+        }
+
+        step = TimeStep.Clamp(step, minTime, maxTime);
+        var productionPercentage = -Math.Cos(twoPi * step.Start.TimeOfDay.TotalDays);
+        return productionPercentage * maxProduction * step.Duration;
     }
 
     /// <inheritdoc />
     public void SimulateStep(TimeStep step, IEnumerable<ISimulationElement> producers)
     {
         //resetting current Production
-        _stepProduction = (GetTotalProductionForTimeOfDay(step.End.TimeOfDay) - GetTotalProductionForTimeOfDay(step.Start.TimeOfDay)) * _maxProduction * step.Duration;
+        _stepProduction = GetProductionForTimeStep(step, _maxProduction);
         if (_mapper != null)
         {
-            ModbusUtils.WriteHoldingRegister(
-                _mapper.GetHoldingRegisters(this)[(16 + sizeof(int))..(16 + 2 * sizeof(int))], 
-                (int)(_stepProduction / step).Amount * 1000);
+            ModbusUtils.WriteHoldingRegister(_mapper.GetHoldingRegisters(this)[20..24], (_stepProduction / step).Amount * 1000);
         }
-        Logger.Debug("{this}: Producing {amount}", this, _stepProduction);
+        Logger.Debug("{this}: Producing {amount} Watt", this, (_stepProduction / step).Amount * 1000);
     }
 
     /// <inheritdoc />
@@ -89,14 +89,14 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         _mapper.RegisterHoldingRegisters(this,
             new List<ModbusInterfaceDescriptor>
             {
-                new(0, 16, "Serial Number"),
-                new(16, sizeof(int), "Max Production in Watt"),
-                new(16 + sizeof(int), sizeof(int), "Current Production in Watt")
+                new(0, 16),
+                new(16, 4),
+                new(20, 4)
             });
 
         var holdingRegisters = _mapper.GetHoldingRegisters(this);
         ModbusUtils.WriteHoldingRegister(holdingRegisters[..16], _serial);
 
-        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..(16 + sizeof(int))], (int)(_maxProduction.Amount * 1000));
+        ModbusUtils.WriteHoldingRegister(holdingRegisters[16..20], _maxProduction.Amount * 1000);
     }
 }

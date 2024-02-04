@@ -69,6 +69,16 @@ public class KWH(double amount)
         return new KW(left, right);
     }
 
+    public static KWH operator *(KWH left, double right)
+    {
+        return new KWH(left.Amount * right);
+    }
+
+    public static KWH operator *(double left, KWH right)
+    {
+        return right * left;
+    }
+
     /// <inheritdoc/>
     public override string ToString()
     {

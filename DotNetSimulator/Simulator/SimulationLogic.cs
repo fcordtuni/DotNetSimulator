@@ -16,7 +16,7 @@ public class SimulationLogic
     private readonly DAG<ISimulationElement> _powerGrid = new();
     private IList<ISimulationElement> _simulationOrder = new List<ISimulationElement>();
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private ISimulationTimer _simulationTimer = new RealTimeSimulationTimer(1, TimeSpan.FromSeconds(1), DateTime.Now);
+    private ISimulationTimer _simulationTimer;
     private bool _shouldRun = true;
     private TimeStep _currentStep;
 

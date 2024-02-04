@@ -31,7 +31,12 @@ internal class RealTimeSimulationTimer : ISimulationTimer
             _nextStep = DateTime.Now;
         }
         _nextStep += _realTimeTimeSpan;
-        await Task.Delay(_nextStep - DateTime.Now);
+        var delay = _nextStep - DateTime.Now;
+        if (delay.Ticks > 0)
+        {
+            await Task.Delay(delay);
+        }
+
         var rValue = new TimeStep(_startTime, _timeSpan);
         _startTime += _timeSpan;
         return rValue;
