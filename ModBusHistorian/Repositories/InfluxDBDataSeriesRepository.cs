@@ -27,6 +27,7 @@ public class InfluxDBDataSeriesRepository :  IDataSeriesRepository
     
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         _client.Dispose();
     }
 
