@@ -1,10 +1,8 @@
 ﻿//Author: Elisabeth Gisser
 
-using ModBusHistorian.Models;
 using ModBusHistorian.Repositories;
 using ModBusHistorian.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using ModBusHistorian.DataHandling;
 
 namespace ModBusHistorian.Controllers;
 
@@ -43,7 +41,7 @@ public class SimpleJsonController : ControllerBase
     public async Task<IActionResult> Search()
     {
         var references = await _repository.GetReferencesAsync();
-        var referenceViewModels = references.Select(r => new ReferenceViewModel { Name = r.Name }).ToList();
+        var referenceViewModels = references.Select(r => new ReferenceViewModel { Text = r.Name }).ToList();
         return Ok(referenceViewModels);
     }
 
@@ -68,13 +66,9 @@ public class SimpleJsonController : ControllerBase
             var startDateTime = endDateTime.Subtract(TimeSpan.FromMilliseconds(query.IntervalMs));
             var dataPoints = await _repository.GetDataPointsAsync(target.Target, startDateTime, endDateTime);
 
-            var timeSeriesData = dataPoints.Select(dp => new object[] { dp.Value, dp.Timestamp.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
+            var timeSeriesData = dataPoints.Select(dp => new object[] { dp.Value, dp.DateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
 
-            resultList.Add(new TimeSeriesViewModel
-            {
-                Target = target.Target,
-                Datapoints = timeSeriesData
-            });
+            resultList.Add(new TimeSeriesViewModel(target.Target, timeSeriesData));
         }
 
         return Ok(resultList);
