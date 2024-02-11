@@ -4,16 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace ModBusHistorian.ViewModels;
 
-internal struct TimeSeriesViewModel
+internal struct TimeSeriesViewModel(string target, object[][] dataPoints)
 {
-	public TimeSeriesViewModel(string target, object?[][] dataPoints)
-	{
-		Target = target;
-		DataPoints = dataPoints;
-	}
-
-	public string Target { get; }
+	public string Target { get; } = target;
 
 	[JsonPropertyName("datapoints")]
-	public object[][] DataPoints { get; }
+	public object[][] DataPoints { get; } = dataPoints;
 }

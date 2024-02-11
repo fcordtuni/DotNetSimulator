@@ -8,8 +8,8 @@ internal static class DateTimeExtensions
     {
         if (dateTime == DateTime.MinValue)
             return 0;
-        DateTime dateTime1 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        TimeSpan timeSpan = dateTime - dateTime1;
-        return timeSpan.TotalMilliseconds >= 0.0 ? (long)timeSpan.TotalMilliseconds : throw new ArgumentOutOfRangeException("Unix epoc starts January 1st, 1970");
+        var dateTime1 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var timeSpan = dateTime - dateTime1;
+        return timeSpan.TotalMilliseconds >= 0.0 ? (long)timeSpan.TotalMilliseconds : throw new ArgumentOutOfRangeException(nameof(dateTime));
     }
 }

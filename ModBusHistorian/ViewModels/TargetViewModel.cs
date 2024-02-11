@@ -1,12 +1,7 @@
 ﻿//Author: Elisabeth Gisser
 
 namespace ModBusHistorian.ViewModels;
-public class TargetViewModel
+public class TargetViewModel(string target)
 {
-	public TargetViewModel(string target)
-	{
-		Target = target;
-	}
-
-	public string Target { get; }
+	public string Target { get; } = target;
 }

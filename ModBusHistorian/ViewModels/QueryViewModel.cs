@@ -4,25 +4,25 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ModBusHistorian.ViewModels;
 
-public class QueryViewModel
+public class QueryViewModel(
+	DateTimeRangeViewModel range,
+	int intervalMs,
+	TargetViewModel[] targets,
+	OutputFormat format,
+	int maxDataPoints)
 {
-	public QueryViewModel(DateTimeRangeViewModel range, int intervalMs, TargetViewModel[] targets, OutputFormat format, int maxDataPoints)
-	{
-		Range = range;
-		IntervalMs = intervalMs;
-		Targets = targets;
-		Format = format;
-		MaxDataPoints = maxDataPoints;
-	}
+	[Required]
+	public DateTimeRangeViewModel Range { get; } = range;
 
 	[Required]
-	public DateTimeRangeViewModel Range { get; }
+	public int IntervalMs { get; } = intervalMs;
+
 	[Required]
-	public int IntervalMs { get; }
+	public TargetViewModel[] Targets { get; } = targets;
+
 	[Required]
-	public TargetViewModel[] Targets { get; }
+	public OutputFormat Format { get; } = format;
+
 	[Required]
-	public OutputFormat Format { get; }
-	[Required]
-	public int MaxDataPoints { get; }
+	public int MaxDataPoints { get; } = maxDataPoints;
 }

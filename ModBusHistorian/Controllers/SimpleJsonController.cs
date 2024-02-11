@@ -20,6 +20,7 @@ public class SimpleJsonController : ControllerBase
     /// Constructor
     /// </summary>
     /// <param name="logger">Logger</param>
+    /// <param name="repository"></param>
     public SimpleJsonController(ILogger<SimpleJsonController> logger, IDataSeriesRepository repository)
     {
         _logger = logger;
