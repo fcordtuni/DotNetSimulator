@@ -36,7 +36,7 @@ public class SolarPanel : ISimulationElement, IModbusDevice
         var providablePower = KWH.Min(maxAmount, _stepProduction);
 
         _stepProduction -= providablePower;
-        Logger.Debug("{this}: Providing {amount}", this, _stepProduction);
+        Logger.Debug("{this}: Providing {amount}", this, providablePower);
         return providablePower;
     }
 

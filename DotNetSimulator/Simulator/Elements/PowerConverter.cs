@@ -81,11 +81,6 @@ public class PowerConverter : ISimulationElement, IModbusDevice
             Logger.Debug("{this}: Consuming {amount}", this, StepProduction);
         }
 
-        if (_mapper != null)
-        {
-
-        }
-
         StepProvision = KWH.Zero;
         _currentTimeStep = step;
 
