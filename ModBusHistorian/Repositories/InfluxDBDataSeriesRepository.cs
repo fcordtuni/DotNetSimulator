@@ -9,12 +9,11 @@ namespace ModBusHistorian.Repositories;
 
 public class InfluxDbDataSeriesRepository(IConfiguration configuration) : IDataSeriesRepository
 {
-    private readonly InfluxDBClient _client = new(configuration.GetValue<string>("InfluxDB:Token") ?? string.Empty,
-        configuration.GetValue<string>("InfluxDB:URL") ?? string.Empty);
+    private readonly InfluxDBClient _client = new(configuration.GetValue<string>("InfluxDB:URL") ?? string.Empty, 
+        configuration.GetValue<string>("InfluxDB:Token") ?? string.Empty);
     private readonly string _bucket = configuration.GetValue<string>("InfluxDB:Bucket") ?? string.Empty;
     private readonly string _org = configuration.GetValue<string>("InfluxDB:Organisation") ?? string.Empty;
-
-    private readonly HashSet<Reference> _references = [];
+    private readonly string _tag = configuration.GetValue<string>("InfluxDB:Data-Tag") ?? "default-tag";
 
     private void Write(Action<WriteApi> action)
     {
@@ -38,14 +37,32 @@ public class InfluxDbDataSeriesRepository(IConfiguration configuration) : IDataS
     {
         Write(api =>
         {
-            var point = PointData.Measurement(reference.Name).Field("data", value).Timestamp(date, WritePrecision.Ms);
+            var point = PointData
+                .Measurement(reference.Name)
+                .Field("data", value)
+                .Timestamp(date, WritePrecision.Ms)
+                .Tag("source", _tag);
             api.WritePoint(point, _bucket, _org);
         });
     }
 
     public Task<IEnumerable<Reference>> GetReferencesAsync(int? skip = null, int? take = null)
     {
-        return Task.FromResult((IEnumerable<Reference>)_references);
+        return QueryAsync(async query =>
+        {
+            var flux = $"from(bucket: \"{_bucket}\") " +
+                       $"|> range(start: 0) " +
+                       $"|> filter(fn: (r) => r.source == \"{_tag}\") " +
+                       $"|> group(columns: [\"_measurement\"])\n  " +
+                       $"|> distinct(column: \"_measurement\")\n  " +
+                       $"|> keep(columns: [\"_measurement\"])";
+            var tables = await query.QueryAsync(flux, _org);
+            return tables.SelectMany(table =>
+                table.Records.Select(record =>
+                    new Reference(record.GetMeasurement())
+                )
+            );
+        });
     }
 
     public Task<IEnumerable<DataPoint>> GetDataPointsAsync(Reference reference, DateTime startDateTime, DateTime endDateTime, int? skip = null,
@@ -54,7 +71,7 @@ public class InfluxDbDataSeriesRepository(IConfiguration configuration) : IDataS
         return QueryAsync(async query =>
         {
             var flux = $"from(bucket:\"{_bucket}\") " +
-                       $"|> range(start: {startDateTime}, end: {endDateTime}) " +
+                       $"|> range(start: {startDateTime:O}, stop: {endDateTime:O}) " +
                        $"|> filter(fn: (r) => r._measurement == \"{reference.Name}\") ";
             var tables = await query.QueryAsync(flux, _org);
             return tables.SelectMany(table =>
