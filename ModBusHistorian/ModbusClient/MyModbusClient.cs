@@ -12,7 +12,7 @@ public class MyModbusClient(IConfiguration iConfig) : IMyModbusClient
     public int PollingTimeMs { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("PollingTimeMs", 1000);
     public int ReconnectTimeMs { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("ReconnectTimeMs", 1000);
     public bool IsAutoReconnectEnabled { get; set; } = iConfig.GetSection("ModbusHistorian").GetValue("AutoReconnect", true);
-    public string IpAddress { get; set; } = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAdress", "127.0.0.1") ?? "127.0.0.1";
+    public string IpAddress { get; set; } = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("IpAddress", "127.0.0.1")!;
     public int Port { get; set; } = iConfig.GetSection("ModbusHistorian").GetSection("ModbusServer").GetValue("Port", 502);
 
     public Task Connect(CancellationToken cancellationToken)

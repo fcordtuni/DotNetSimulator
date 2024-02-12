@@ -10,9 +10,9 @@ namespace ModBusHistorian.Repositories;
 public class InfluxDbDataSeriesRepository(IConfiguration configuration) : IDataSeriesRepository
 {
     private readonly InfluxDBClient _client = new(configuration.GetValue<string>("InfluxDB:URL") ?? string.Empty, 
-        configuration.GetValue<string>("InfluxDB:Token") ?? string.Empty);
-    private readonly string _bucket = configuration.GetValue<string>("InfluxDB:Bucket") ?? string.Empty;
-    private readonly string _org = configuration.GetValue<string>("InfluxDB:Organisation") ?? string.Empty;
+        configuration.GetValue<string>("InfluxDB:Token"));
+    private readonly string? _bucket = configuration.GetValue<string>("InfluxDB:Bucket");
+    private readonly string? _org = configuration.GetValue<string>("InfluxDB:Organisation");
     private readonly string _tag = configuration.GetValue<string>("InfluxDB:Data-Tag") ?? "default-tag";
 
     private void Write(Action<WriteApi> action)
