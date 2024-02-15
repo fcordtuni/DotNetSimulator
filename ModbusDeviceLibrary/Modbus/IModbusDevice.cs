@@ -7,6 +7,7 @@ namespace ModbusDeviceLibrary.Modbus;
 /// </summary>
 public interface IModbusDevice
 {
+    // ReSharper disable once UnusedMemberInSuper.Global
     /// <summary>
     /// Registers a <see cref="IModbusMapper"/> as this devices mapper
     /// </summary>

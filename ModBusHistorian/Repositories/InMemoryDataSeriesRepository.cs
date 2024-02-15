@@ -3,6 +3,7 @@ using ModBusHistorian.Models;
 
 namespace ModBusHistorian.Repositories;
 
+// ReSharper disable once UnusedType.Global
 /// <summary>
 /// Implements a data series repository in memory.
 /// </summary>

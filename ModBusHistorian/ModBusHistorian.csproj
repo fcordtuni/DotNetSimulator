@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ModbusDeviceLibrary\ModbusDeviceLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataHandling\" />
+  </ItemGroup>
+
 </Project>

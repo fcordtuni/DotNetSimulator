@@ -13,17 +13,14 @@ namespace ModBusHistorian.Controllers;
 [Route("")]
 public class SimpleJsonController : ControllerBase
 {
-    private readonly ILogger<SimpleJsonController> _logger;
     private readonly IDataSeriesRepository _repository;
 
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="logger">Logger</param>
     /// <param name="repository"></param>
-    public SimpleJsonController(ILogger<SimpleJsonController> logger, IDataSeriesRepository repository)
+    public SimpleJsonController(IDataSeriesRepository repository)
     {
-        _logger = logger;
         _repository = repository;
     }
 
@@ -67,9 +64,9 @@ public class SimpleJsonController : ControllerBase
             var startDateTime = endDateTime.Subtract(TimeSpan.FromMilliseconds(query.IntervalMs));
             var dataPoints = await _repository.GetDataPointsAsync(target.Target, startDateTime, endDateTime);
 
-            var timeSeriesData = dataPoints.Select(dp => new object[] { dp.Value, dp.DateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
+            var timeSeriesData = dataPoints.Select(dp => new[] { dp.Value, dp.DateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
 
-            resultList.Add(new TimeSeriesViewModel(target.Target, timeSeriesData));
+            resultList.Add(new TimeSeriesViewModel(target.Target, timeSeriesData!));
         }
 
         return Ok(resultList);

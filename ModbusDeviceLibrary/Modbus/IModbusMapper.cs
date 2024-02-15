@@ -21,6 +21,7 @@ public interface IModbusMapper
     /// <returns></returns>
     Span<bool> GetCoils(IModbusDevice caller);
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Tells the IModbusMapper to map a number of Discrete Inputs for the given caller
     /// </summary>
@@ -28,6 +29,7 @@ public interface IModbusMapper
     /// <param name="descriptors"></param>
     void RegisterDiscreteInputs(IModbusDevice caller, ICollection<ModbusInterfaceDescriptor> descriptors);
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Gets the Discrete Inputs mapped to the caller
     /// </summary>
@@ -49,6 +51,7 @@ public interface IModbusMapper
     /// <returns></returns>
     Span<short> GetHoldingRegisters(IModbusDevice caller);
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Tells the IModbusMapper to map a number of Input Registers for the given caller
     /// </summary>
@@ -56,6 +59,7 @@ public interface IModbusMapper
     /// <param name="descriptors"></param>
     void RegisterInputRegisters(IModbusDevice caller, ICollection<ModbusInterfaceDescriptor> descriptors);
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Gets the Input Registers mapped to the caller
     /// </summary>

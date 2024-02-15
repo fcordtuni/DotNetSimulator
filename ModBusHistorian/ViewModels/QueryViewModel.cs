@@ -7,7 +7,7 @@ namespace ModBusHistorian.ViewModels;
 public class QueryViewModel(
 	DateTimeRangeViewModel range,
 	int intervalMs,
-	TargetViewModel[] targets,
+	IEnumerable<TargetViewModel> targets,
 	OutputFormat format,
 	int maxDataPoints)
 {
@@ -18,7 +18,7 @@ public class QueryViewModel(
 	public int IntervalMs { get; } = intervalMs;
 
 	[Required]
-	public TargetViewModel[] Targets { get; } = targets;
+	public IEnumerable<TargetViewModel> Targets { get; } = targets;
 
 	[Required]
 	public OutputFormat Format { get; } = format;

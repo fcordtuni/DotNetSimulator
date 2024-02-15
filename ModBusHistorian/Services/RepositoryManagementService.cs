@@ -101,15 +101,13 @@ internal class RepositoryManagementService(
             }
             
             Logger.Info("Shutdown: Disconnecting from MODBUS server.");
-            myModbusClient.Disconnect();
+            return myModbusClient.Disconnect();
         }
         catch (Exception e)
         {
             Logger.Error(e);
             throw;
         }
-
-        return Task.CompletedTask;
     }
 
     public void Dispose()

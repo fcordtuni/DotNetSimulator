@@ -29,6 +29,7 @@ public class SimulationLogic
         _simulationTimer = timer;
     }
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// fast forwards the simulation to to the given <paramref name="endTime"/>, then continues at real time
     /// </summary>
@@ -42,6 +43,7 @@ public class SimulationLogic
                 .AndThen(ISimulationTimer.RealTime(realTimeSimulationSpeed, simulationResolution, endTime));
     }
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Sets the Simulation to real time
     /// </summary>
@@ -52,6 +54,7 @@ public class SimulationLogic
         _simulationTimer = ISimulationTimer.RealTime(realTimeSimulationSpeed, simulationResolution, _currentStep.End);
     }
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// stops the simulation
     /// </summary>
@@ -65,6 +68,7 @@ public class SimulationLogic
         _simulationOrder = _powerGrid.TopologicalSort();
     }
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// adds a link between a <see cref="ISimulationElement"/> pair
     /// </summary>

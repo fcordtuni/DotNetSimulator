@@ -1,5 +1,6 @@
 namespace ModBusHistorian.ModbusClient;
 
+// ReSharper disable UnusedMemberInSuper.Global
 /// <summary>
 /// Interface for the modbus client
 /// </summary>
@@ -46,6 +47,7 @@ public interface IMyModbusClient
     /// <param name="addressRange">The address range polled for</param>
     void AddReadInputRegisterPolling(AddressRange addressRange);
 
+    // ReSharper disable once UnusedMember.Global
     /// <summary>
     /// Returns the value of an address
     /// </summary>
@@ -56,5 +58,7 @@ public interface IMyModbusClient
     short[] GetInputRegisterValues(int from, int to);
 
     void WriteCoil(int address, bool value);
+    
+    // ReSharper disable once UnusedMember.Global
     void Dispose();
 }

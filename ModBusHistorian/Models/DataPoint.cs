@@ -11,7 +11,7 @@ public readonly struct DataPoint
 	/// <param name="reference"></param>
 	/// <param name="dateTime"></param>
 	/// <param name="value"></param>
-	public DataPoint(Reference reference, DateTime dateTime, object value)
+	public DataPoint(Reference reference, DateTime dateTime, object? value)
 	{
 		Reference = reference;
 		DateTime = dateTime;
@@ -26,7 +26,7 @@ public readonly struct DataPoint
 	/// <summary>
 	/// Value of the data point
 	/// </summary>
-	public object Value { get; }
+	public object? Value { get; }
 	
 	/// <summary>
 	/// Reference of the data point
