@@ -4,4 +4,26 @@ services:
     ports:
       - 8086:8086
     volumes:
-      - ./docker_data:/var/lib/influxdb2
+      - influx-data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminadmin
+      - DOCKER_INFLUXDB_INIT_ORG=test-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=test-bucket
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=4L0DinXn_wgw7haVlfuOqBVbTqcekidGYG54xpkM0xk-o4ifRv9KxqdzP4PufVkOEOW14OkBZDTQqqCH9xI2mQ==
+
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ${PWD}/docker_data/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ${PWD}/docker_data/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
+
+volumes:
+  influx-data: {}
+  grafana-data: {}
