@@ -72,7 +72,8 @@ public class InfluxDbDataSeriesRepository(IConfiguration configuration) : IDataS
         {
             var flux = $"from(bucket:\"{_bucket}\") " +
                        $"|> range(start: {startDateTime:O}, stop: {endDateTime:O}) " +
-                       $"|> filter(fn: (r) => r._measurement == \"{reference.Name}\") ";
+                       $"|> filter(fn: (r) => r._measurement == \"{reference.Name}\") " +
+                       $"|> limit(n: {take ?? 9999999}, offset: {skip ?? 0}) ";
             var tables = await query.QueryAsync(flux, _org);
             return tables.SelectMany(table =>
                 table.Records.Select(record =>
