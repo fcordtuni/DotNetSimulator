@@ -39,7 +39,7 @@ public class SimpleJsonController : ControllerBase
     public async Task<IActionResult> Search()
     {
         var references = await _repository.GetReferencesAsync();
-        var referenceViewModels = references.Select(r => new ReferenceViewModel { Text = r.Name }).ToList();
+        var referenceViewModels = references.Select(r => r.Name).ToList();
         return Ok(referenceViewModels);
     }
 
@@ -60,7 +60,7 @@ public class SimpleJsonController : ControllerBase
 
         foreach (var target in query.Targets.Where(t => !string.IsNullOrWhiteSpace(t.Target)))
         {
-            var dataPoints = await _repository.GetDataPointsAsync(target.Target, query.Range.From, query.Range.To, query.MaxDataPoints);
+            var dataPoints = await _repository.GetDataPointsAsync(target.Target, query.Range.From, query.Range.To, 0, query.MaxDataPoints);
 
             var timeSeriesData = dataPoints.Select(dp => new[] { dp.Value, dp.DateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds }).ToArray();
 
